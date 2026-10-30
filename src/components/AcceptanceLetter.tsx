@@ -110,7 +110,6 @@ export function AcceptanceLetter() {
         <div className="acceptance-pin">
           <div className="acceptance-layout container-prose">
             <div className="acceptance-copy">
-              <p className="acceptance-eyebrow">The next chapter</p>
               <h2 id="acceptance-title">
                 Some moments
                 <br /> change <em>everything.</em>
@@ -121,15 +120,12 @@ export function AcceptanceLetter() {
               </p>
               <div className="acceptance-chapters" aria-hidden="true">
                 <div className="acceptance-chapter" data-step="begin">
-                  <span>01 / The possibility</span>
                   <p>A future worth imagining.</p>
                 </div>
                 <div className="acceptance-chapter" data-step="open">
-                  <span>02 / The moment</span>
                   <p>All that work. A whole new world.</p>
                 </div>
                 <div className="acceptance-chapter" data-step="next">
-                  <span>03 / Your next chapter</span>
                   <p>Take a breath. Take it in.</p>
                 </div>
               </div>
@@ -190,10 +186,6 @@ export function AcceptanceLetter() {
                   <span key={index} style={style} />
                 ))}
               </div>
-              <p className="acceptance-visual-caption" aria-hidden="true">
-                <span />
-                Scroll to unfold the possibility
-              </p>
             </div>
           </div>
           <div className="acceptance-progress" aria-hidden="true">

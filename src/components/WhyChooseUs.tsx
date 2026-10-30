@@ -1,21 +1,17 @@
 const reasons = [
   {
-    number: "01",
     title: "A familiar face, every session.",
     body: "Work directly with founder Krish Sav. Pick up the conversation with someone who knows what you are working toward.",
   },
   {
-    number: "02",
     title: "Feedback you can understand.",
     body: "Talk through the reasoning behind an edit or a suggestion. Build the confidence to take the next step yourself.",
   },
   {
-    number: "03",
     title: "Room for your real life.",
     body: "Virtual sessions around school and family commitments. Monday to Saturday, 9am to 8pm Central Time.",
   },
   {
-    number: "04",
     title: "A thoughtful place to start.",
     body: "Meet in a free, 30-minute consultation. Choose the guidance you need, with no registration fee.",
   },
@@ -29,9 +25,6 @@ export function WhyChooseUs() {
     >
       <div className="container-prose grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
         <div>
-          <p className="font-display text-xs uppercase tracking-[0.18em] text-gold">
-            The Lodestar difference
-          </p>
           <h2
             id="values-title"
             className="mt-6 max-w-md font-serif text-4xl font-semibold leading-[1.06] md:text-5xl"
@@ -48,16 +41,7 @@ export function WhyChooseUs() {
         </div>
         <div className="divide-y divide-primary-foreground/20 border-t border-primary-foreground/20">
           {reasons.map((reason) => (
-            <div
-              key={reason.title}
-              className="grid grid-cols-[2rem_1fr] gap-4 py-6 first:pt-6 last:pb-0"
-            >
-              <span
-                className="pt-1.5 font-display text-xs tracking-wider text-gold"
-                aria-hidden="true"
-              >
-                {reason.number}
-              </span>
+            <div key={reason.title} className="py-6 first:pt-6 last:pb-0">
               <div>
                 <h3 className="font-serif text-2xl font-semibold text-primary-foreground">
                   {reason.title}

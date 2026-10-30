@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowRight, Check, ExternalLink, Star } from "lucide-react";
-import heroImg from "@/assets/hero-campus.jpg";
 import founderImg from "@/assets/krish-sav-founder.jpg";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
@@ -9,6 +8,7 @@ import { AcceptanceLetter } from "@/components/AcceptanceLetter";
 import { clientsHelped, programs } from "@/data/programs";
 import { reviews, featuredReviews, totalReviewCount, averageRating } from "@/data/reviews";
 import "@/styles/home.css";
+import "@/styles/hero.css";
 
 const consultationUrl = "https://cal.com/krish-s/lodestar?overlayCalendar=true";
 
@@ -71,10 +71,7 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:url", content: "https://lodestaradvising.com/" },
     ],
-    links: [
-      { rel: "canonical", href: "https://lodestaradvising.com/" },
-      { rel: "preload", as: "image", href: heroImg, fetchpriority: "high" },
-    ],
+    links: [{ rel: "canonical", href: "https://lodestaradvising.com/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -134,12 +131,9 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="home-page">
-      <section className="home-hero" aria-labelledby="home-title">
-        <div className="home-container home-hero-grid">
+      <section className="home-hero home-hero-blue" aria-labelledby="home-title">
+        <div className="home-container home-hero-inner">
           <div className="home-hero-copy">
-            <p className="home-eyebrow">
-              <span /> College guidance, made personal
-            </p>
             <h1 id="home-title">
               Your story.
               <br />
@@ -167,54 +161,7 @@ function Home() {
                 <ArrowDownRight size={18} aria-hidden="true" />
               </Link>
             </div>
-            <div className="home-hero-proof">
-              <span
-                className="home-stars"
-                aria-label={`${averageRating.toFixed(1)} out of 5 stars`}
-              >
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={13} aria-hidden="true" />
-                ))}
-              </span>
-              <span>
-                <strong>{averageRating.toFixed(1)}</strong> on Google{" "}
-                <span className="home-proof-separator">/</span> {clientsHelped}+ clients helped
-              </span>
-            </div>
           </div>
-          <figure className="home-hero-visual">
-            <div className="home-hero-image-wrap">
-              <img
-                src={heroImg}
-                alt="Sunlight falling across an ivy-covered college campus"
-                width={1600}
-                height={1024}
-                fetchPriority="high"
-                decoding="async"
-                className="home-hero-image"
-              />
-            </div>
-            <figcaption>
-              <span>A little perspective. A new possibility.</span>
-              <span className="home-image-index">01 — THE NEXT CHAPTER</span>
-            </figcaption>
-            <div className="home-hero-seal" aria-hidden="true">
-              <span>YOUR STORY</span>
-              <svg viewBox="0 0 40 40" fill="none">
-                <path
-                  d="M20 2 23.8 16.2 38 20 23.8 23.8 20 38 16.2 23.8 2 20 16.2 16.2 20 2Z"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                />
-                <path
-                  d="m8 8 12 8 12-8-8 12 8 12-12-8-12 8 8-12-8-12Z"
-                  stroke="currentColor"
-                  strokeWidth=".6"
-                />
-              </svg>
-              <span>YOUR DIRECTION</span>
-            </div>
-          </figure>
         </div>
       </section>
 
@@ -235,7 +182,6 @@ function Home() {
             </figcaption>
           </figure>
           <Reveal className="home-founder-copy">
-            <p className="home-eyebrow">A real person in your corner</p>
             <h2 id="founder-title">
               Meet your advisor.
               <br />
@@ -270,7 +216,6 @@ function Home() {
         <div className="home-container">
           <div className="home-section-heading">
             <div>
-              <p className="home-eyebrow">Two ways to work together</p>
               <h2 id="programs-title">
                 Support for where
                 <br />
@@ -283,10 +228,9 @@ function Home() {
             </p>
           </div>
           <div className="home-program-list">
-            {programs.map((program, index) => (
+            {programs.map((program) => (
               <article key={program.id} className="home-program">
                 <div className="home-program-intro">
-                  <span className="home-program-index">0{index + 1}</span>
                   <p className="home-eyebrow">
                     {program.scope === "essays-only"
                       ? "Focused essay coaching"
@@ -338,7 +282,6 @@ function Home() {
         <div className="home-container">
           <div className="home-section-heading">
             <div>
-              <p className="home-eyebrow">A clear way forward</p>
               <h2 id="process-title">
                 Start with a conversation.
                 <br />
@@ -375,7 +318,6 @@ function Home() {
         <div className="home-container">
           <div className="home-section-heading">
             <div>
-              <p className="home-eyebrow">In their own words</p>
               <h2 id="reviews-title">
                 Personal guidance.
                 <br />
@@ -429,7 +371,6 @@ function Home() {
       <section className="home-colleges home-section" aria-labelledby="colleges-title">
         <div className="home-container">
           <div className="home-colleges-heading">
-            <p className="home-eyebrow">Firsthand perspective</p>
             <h2 id="colleges-title">
               Where the founder’s
               <br />
@@ -442,17 +383,12 @@ function Home() {
             </p>
           </div>
           <CollegeMarquee />
-          <p className="home-college-note">
-            Logos represent founder acceptances, not Lodestar student outcomes or university
-            endorsements.
-          </p>
         </div>
       </section>
 
       <section className="home-faq home-section" aria-labelledby="faq-title">
         <div className="home-container home-faq-layout">
           <div>
-            <p className="home-eyebrow">A few useful answers</p>
             <h2 id="faq-title">
               Before we <br />
               <em>say hello.</em>
@@ -484,7 +420,6 @@ function Home() {
 
       <section className="home-closing" aria-labelledby="closing-title">
         <div className="home-container home-closing-inner">
-          <p className="home-eyebrow">The next step is a small one</p>
           <h2 id="closing-title">
             Let’s talk about
             <br />
@@ -505,9 +440,6 @@ function Home() {
             <ArrowRight size={17} aria-hidden="true" />
           </a>
           <span className="home-closing-note">No registration fee. No obligation.</span>
-          <div className="home-closing-star" aria-hidden="true">
-            ✦
-          </div>
         </div>
       </section>
     </div>

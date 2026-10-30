@@ -10,7 +10,9 @@ import harvard from "@/assets/logos/harvard.svg";
 import mit from "@/assets/logos/mit.png";
 import penn from "@/assets/logos/penn.png";
 import princeton from "@/assets/logos/princeton.png";
-import { useState } from "react";
+import { Pause, Play } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import "@/styles/college-marquee.css";
 
 const colleges = [
   { name: "Harvard University", logo: harvard },
@@ -28,30 +30,118 @@ const colleges = [
 ];
 
 export function CollegeMarquee() {
-  const [activeCollege, setActiveCollege] = useState<string | null>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const sequenceRef = useRef<HTMLUListElement>(null);
+  const viewportId = useId();
+  const [isPaused, setIsPaused] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasFocus, setHasFocus] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [isDocumentVisible, setIsDocumentVisible] = useState(
+    () => document.visibilityState === "visible",
+  );
+  const isRunning = !isPaused && !isHovered && !hasFocus && isInView && isDocumentVisible;
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setIsPaused(preference.matches);
+    const updateVisibility = () => setIsDocumentVisible(document.visibilityState === "visible");
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), {
+      threshold: 0.01,
+    });
+
+    if (viewportRef.current) observer.observe(viewportRef.current);
+    preference.addEventListener("change", updatePreference);
+    document.addEventListener("visibilitychange", updateVisibility);
+
+    return () => {
+      observer.disconnect();
+      preference.removeEventListener("change", updatePreference);
+      document.removeEventListener("visibilitychange", updateVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const sequence = sequenceRef.current;
+    if (!isRunning || !viewport || !sequence) return;
+
+    let sequenceWidth = sequence.getBoundingClientRect().width;
+    let origin = viewport.scrollLeft;
+    let startedAt: number | null = null;
+    let frameId = 0;
+
+    // Each complete sequence takes 52 seconds, independent of frame rate.
+    const animate = (timestamp: number) => {
+      if (startedAt === null) startedAt = timestamp;
+      if (sequenceWidth > 0) {
+        viewport.scrollLeft =
+          (origin + ((timestamp - startedAt) / 52_000) * sequenceWidth) % sequenceWidth;
+      }
+      frameId = window.requestAnimationFrame(animate);
+    };
+    const observer = new ResizeObserver(() => {
+      sequenceWidth = sequence.getBoundingClientRect().width;
+      origin = viewport.scrollLeft;
+      startedAt = null;
+    });
+
+    observer.observe(sequence);
+    frameId = window.requestAnimationFrame(animate);
+
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [isRunning]);
 
   return (
-    <div className="logo-wall" role="list" aria-label="Founder acceptances at top universities">
-      <div className="logo-wall-grid">
-        {colleges.map((c) => (
-          <button
-            key={c.name}
-            type="button"
-            role="listitem"
-            aria-label={c.name}
-            aria-pressed={activeCollege === c.name}
-            onClick={() => setActiveCollege((current) => (current === c.name ? null : c.name))}
-            className="logo-wall-item"
-            data-active={activeCollege === c.name ? "true" : "false"}
-          >
-            <img
-              src={c.logo}
-              alt={`${c.name} logo`}
-              loading="lazy"
-              className="h-20 md:h-24 w-auto object-contain drop-shadow-md"
-            />
-          </button>
-        ))}
+    <div className="college-marquee">
+      <div
+        id={viewportId}
+        ref={viewportRef}
+        className="college-marquee-viewport"
+        data-running={isRunning}
+        role="region"
+        aria-label="Founder acceptances at top universities"
+        tabIndex={0}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onFocus={() => setHasFocus(true)}
+        onBlur={() => setHasFocus(false)}
+        onPointerDown={(event) => {
+          if (event.pointerType === "touch" || event.pointerType === "pen") setIsPaused(true);
+        }}
+      >
+        <div className="college-marquee-track">
+          <ul ref={sequenceRef} className="college-marquee-sequence">
+            {colleges.map((college) => (
+              <li key={college.name} className="college-marquee-item">
+                <img src={college.logo} alt={college.name} loading="lazy" draggable={false} />
+              </li>
+            ))}
+          </ul>
+          <ul className="college-marquee-sequence" aria-hidden="true">
+            {colleges.map((college) => (
+              <li key={college.name} className="college-marquee-item">
+                <img src={college.logo} alt="" loading="lazy" draggable={false} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="college-marquee-controls">
+        <button
+          type="button"
+          className="college-marquee-toggle"
+          aria-controls={viewportId}
+          onClick={() => setIsPaused((paused) => !paused)}
+        >
+          {isPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+          <span>{isPaused ? "Play logos" : "Pause logos"}</span>
+        </button>
       </div>
     </div>
   );

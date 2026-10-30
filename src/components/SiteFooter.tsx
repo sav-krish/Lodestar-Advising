@@ -46,9 +46,6 @@ export function SiteFooter() {
               <Facebook size={20} />
             </a>
           </div>
-          <p className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-gold font-display">
-            Established · MMXXVI
-          </p>
         </div>
         <div>
           <h4 className="font-display text-xs uppercase tracking-[0.2em] mb-4 text-gold">
@@ -96,7 +93,6 @@ export function SiteFooter() {
       <div className="border-t border-primary-foreground/10">
         <div className="container-prose py-6 text-[0.65rem] text-primary-foreground flex justify-between font-display tracking-[0.18em] uppercase">
           <span>© {new Date().getFullYear()} Lodestar Advising</span>
-          <span>Crafted for future scholars.</span>
         </div>
       </div>
     </footer>

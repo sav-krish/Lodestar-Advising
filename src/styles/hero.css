@@ -1,0 +1,138 @@
+/* The original navy identity, with quiet movement behind the content. */
+.home-hero.home-hero-blue {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: min(820px, calc(100svh - var(--site-header-height)));
+  padding-block: clamp(100px, 12vw, 170px);
+  background: var(--gradient-hero);
+  color: white;
+}
+.home-hero-blue::before,
+.home-hero-blue::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.home-hero-blue::before {
+  inset: -35%;
+  background:
+    radial-gradient(ellipse at 72% 36%, #536eaa59, transparent 44%),
+    radial-gradient(ellipse at 22% 76%, #58569a66, transparent 43%);
+  animation: lodestar-blue-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.home-hero-blue::after {
+  inset: -30%;
+  background: radial-gradient(ellipse at 55% 80%, #294b843d, transparent 50%);
+  animation: lodestar-blue-depth 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.home-hero-blue .home-hero-inner {
+  position: relative;
+  width: min(100% - 96px, 1248px);
+}
+.home-hero-blue .home-hero-copy {
+  max-width: 900px;
+  padding: 0;
+}
+.home-hero-blue h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(4.6rem, 8.6vw, 8.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+}
+.home-hero-blue h1 em {
+  font-weight: 400;
+}
+.home-hero-blue .home-hero-break {
+  display: none;
+}
+.home-hero-blue .home-hero-description {
+  max-width: 590px;
+  margin-top: 32px;
+  color: #ececf5;
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  line-height: 1.55;
+}
+.home-hero-blue .home-actions {
+  margin-top: 36px;
+  gap: 20px 32px;
+}
+.home-hero-blue .home-text-link {
+  color: white;
+}
+.home-hero-blue .home-text-link:hover {
+  text-decoration-color: var(--gold);
+}
+.home-hero-blue a:focus-visible {
+  outline-color: var(--gold);
+}
+@keyframes lodestar-blue-drift {
+  from {
+    transform: translate3d(-3%, 1%, 0) rotate(-5deg) scale(1);
+  }
+  to {
+    transform: translate3d(5%, -3%, 0) rotate(5deg) scale(1.12);
+  }
+}
+@keyframes lodestar-blue-depth {
+  from {
+    transform: translate3d(4%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-5%, 4%, 0) scale(1.15);
+  }
+}
+@media (max-width: 1100px) {
+  .home-hero-blue .home-hero-inner {
+    width: calc(100% - 64px);
+  }
+}
+@media (max-width: 620px) {
+  .home-hero.home-hero-blue {
+    min-height: calc(92svh - var(--site-header-height));
+    padding-block: 88px;
+  }
+  .home-hero-blue .home-hero-inner {
+    width: calc(100% - 44px);
+  }
+  .home-hero-blue h1 {
+    font-size: clamp(3.6rem, 13vw, 4.8rem);
+    line-height: 1.02;
+  }
+  .home-hero-blue h1 > br {
+    display: block;
+  }
+  .home-hero-blue h1 em {
+    display: inline;
+  }
+  .home-hero-blue .home-hero-description {
+    margin-top: 25px;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+  .home-hero-blue .home-actions {
+    margin-top: 30px;
+    gap: 12px 24px;
+  }
+}
+@media (max-height: 550px) {
+  .home-hero.home-hero-blue {
+    min-height: auto;
+    padding-block: 72px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-blue::before,
+  .home-hero-blue::after {
+    animation: none;
+    will-change: auto;
+  }
+}

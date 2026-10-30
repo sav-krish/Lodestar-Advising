@@ -9,10 +9,6 @@ const faqs = [
     a: "Lodestar Advising is a premium, founder-led college admissions consultancy guiding ambitious students into the world's most selective universities. Our track record includes 12+ elite student acceptances and $600K+ in scholarships won for students. We have helped 20+ clients. Choose The Lodestar Hour for flexible admissions support or The Lodestar Essay Package for 10 premium, 30-minute essay-only classes at a discounted equivalent hourly rate.",
   },
   {
-    q: "Is Lodestar Advising the same as lodestarcollegecounseling.com?",
-    a: "No. Lodestar Advising is based at lodestaradvising.com and is a separate, founder-led consultancy led by Krish Sav. We are not affiliated with any other business using a similar name. Our official domains are lodestaradvising.com and lodestarcollegecounseling.lovable.app.",
-  },
-  {
     q: "Who founded Lodestar Advising?",
     a: "Lodestar was founded by Krish Sav, who developed the admissions playbook behind Lodestar's 12+ elite student acceptances and $600K+ in scholarships won for students. Every student at Lodestar works directly with the founder, from strategy through submission.",
   },
@@ -93,8 +89,8 @@ function FAQ() {
           className="mt-6 max-w-2xl text-lg text-primary-foreground font-serif animate-fade-up"
           style={{ animationDelay: "0.35s" }}
         >
-          What Lodestar is, who we work with, and how our founder-led process
-          delivers Ivy League acceptances and scholarship offers.
+          What Lodestar is, who we work with, and how our founder-led process delivers Ivy League
+          acceptances and scholarship offers.
         </p>
       </PageHero>
 
@@ -114,9 +110,7 @@ function FAQ() {
                 >
                   <details className="group py-6">
                     <summary className="flex justify-between items-center cursor-pointer list-none">
-                      <span className="font-serif italic text-xl text-primary pr-6">
-                        {f.q}
-                      </span>
+                      <span className="font-serif italic text-xl text-primary pr-6">{f.q}</span>
                       <span className="text-gold text-2xl font-light transition-transform duration-300 group-open:rotate-45">
                         +
                       </span>

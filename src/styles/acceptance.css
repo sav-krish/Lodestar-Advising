@@ -31,13 +31,6 @@
   z-index: 2;
   padding-block: 2rem;
 }
-.acceptance-eyebrow {
-  font-family: var(--font-display);
-  font-size: 0.67rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #80632a;
-}
 .acceptance-story .acceptance-copy h2 {
   margin-top: 1.5rem;
   font-size: clamp(2.8rem, 4.6vw, 4.6rem);
@@ -70,13 +63,6 @@
   transition:
     opacity 220ms ease,
     transform 220ms ease;
-}
-.acceptance-chapter > span {
-  font-family: var(--font-display);
-  font-size: 0.61rem;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: #80632a;
 }
 .acceptance-chapter p {
   margin-top: 0.45rem;
@@ -353,24 +339,6 @@
   border-radius: 50%;
   height: 5px;
 }
-.acceptance-visual-caption {
-  position: absolute;
-  bottom: 0;
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: #80632a;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-.acceptance-visual-caption > span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-}
 .acceptance-progress {
   position: absolute;
   bottom: 0;
@@ -426,9 +394,6 @@
     padding: 0;
     text-align: center;
   }
-  .acceptance-eyebrow {
-    font-size: 0.59rem;
-  }
   .acceptance-story .acceptance-copy h2 {
     margin-top: 0.75rem;
     font-size: 2.7rem;
@@ -474,10 +439,6 @@
   .acceptance-letterhead svg {
     width: 20px;
     height: 20px;
-  }
-  .acceptance-visual-caption {
-    bottom: 2px;
-    font-size: 0.47rem;
   }
 }
 @media (max-height: 720px) and (min-width: 641px) {
@@ -553,7 +514,6 @@
   }
   .acceptance-celebration,
   .acceptance-seal,
-  .acceptance-visual-caption,
   .acceptance-progress {
     display: none;
   }
@@ -572,9 +532,6 @@
     margin: 0;
     z-index: 10;
   }
-  .acceptance-visual-caption {
-    display: none;
-  }
 }
 @media (max-height: 500px) {
   .acceptance-layout {
@@ -591,4 +548,7 @@
     box-sizing: content-box;
     padding-top: 40px;
   }
+}
+.acceptance-story .acceptance-copy h2 {
+  margin-top: 0;
 }
