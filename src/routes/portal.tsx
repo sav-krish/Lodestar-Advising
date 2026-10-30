@@ -46,6 +46,7 @@ function Portal() {
   const [message, setMessage] = useState("");
   const [authMode, setAuthMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const configured = Boolean(supabase);
   const hasApprovedPayment = payments.some((payment) => payment.status === "approved");
@@ -66,6 +67,7 @@ function Portal() {
     const client = supabase;
     if (!client || !session) return;
     const load = async () => {
+      setLoading(true);
       const [profileResult, paymentResult, creditResult, bookingResult] = await Promise.all([
         client.from("profiles").select("*").eq("id", session.user.id).maybeSingle(),
         client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
@@ -91,6 +93,11 @@ function Portal() {
         ),
       );
       setBookings(bookingResult.data ?? []);
+      const firstDataError = [paymentResult.error, creditResult.error, bookingResult.error].find(
+        (error) => error,
+      );
+      if (firstDataError && !profileResult.error) setMessage(firstDataError.message);
+      setLoading(false);
     };
     void load();
   }, [session]);
@@ -111,8 +118,11 @@ function Portal() {
             options: { data: { full_name: String(form.get("name") ?? "") } },
           });
     setMessage(
-      result.error?.message ??
-        (authMode === "sign-up" ? "Check your email to confirm your account." : ""),
+      result.error
+        ? friendlyAuthError(result.error.message)
+        : authMode === "sign-up"
+          ? "Account created. Check your email to confirm your account, then sign in."
+          : "Signed in.",
     );
     setBusy(false);
   };
@@ -179,7 +189,14 @@ function Portal() {
   if (!profile)
     return (
       <PortalShell>
-        <Notice text={message || "Loading your secure portal..."} />
+        <Notice
+          text={
+            message ||
+            (loading
+              ? "Loading your secure portal..."
+              : "Your profile is still being prepared. Please sign out and sign in again.")
+          }
+        />
       </PortalShell>
     );
 
@@ -306,6 +323,19 @@ function Portal() {
       )}
     </PortalShell>
   );
+}
+
+function friendlyAuthError(message: string) {
+  if (message.toLowerCase().includes("invalid login credentials")) {
+    return "That email or password did not match. Check both fields and try again.";
+  }
+  if (message.toLowerCase().includes("email not confirmed")) {
+    return "Confirm your email from the message Supabase sent, then sign in again.";
+  }
+  if (message.toLowerCase().includes("user already registered")) {
+    return "An account already exists for this email. Switch to Sign in.";
+  }
+  return message;
 }
 
 function PaymentForm({

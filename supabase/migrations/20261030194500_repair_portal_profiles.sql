@@ -14,6 +14,12 @@ begin
   on conflict (id) do update
   set email = excluded.email,
       full_name = coalesce(public.profiles.full_name, excluded.full_name);
+  update public.profiles
+  set role = case
+    when lower(email) = 'advising.lodestar@gmail.com' then 'admin'::public.app_role
+    else role
+  end
+  where id = new.id;
   return new;
 end;
 $$;
@@ -34,5 +40,9 @@ where users.email is not null
 on conflict (id) do update
 set email = excluded.email,
     full_name = coalesce(public.profiles.full_name, excluded.full_name);
+
+update public.profiles
+set role = 'admin'
+where lower(email) = 'advising.lodestar@gmail.com';
 
 notify pgrst, 'reload schema';
