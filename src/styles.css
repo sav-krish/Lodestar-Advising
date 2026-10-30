@@ -372,6 +372,213 @@
     padding: 0.85rem 1rem;
     text-transform: uppercase;
   }
+
+  /* The acceptance moment gives the process a single, meaningful visual story. */
+  .acceptance-moment {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(5rem, 11vw, 9rem) 0;
+    background:
+      radial-gradient(
+        circle at 78% 45%,
+        color-mix(in oklab, var(--gold) 9%, transparent),
+        transparent 28rem
+      ),
+      var(--background);
+  }
+  .acceptance-moment-grid {
+    display: grid;
+    align-items: center;
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+  .acceptance-moment-copy {
+    max-width: 38rem;
+  }
+  .acceptance-stage {
+    position: relative;
+    display: grid;
+    min-height: 31rem;
+    place-items: center;
+    perspective: 1200px;
+  }
+  .acceptance-stage-glow {
+    position: absolute;
+    width: min(28rem, 85vw);
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--gold) 20%, transparent),
+      transparent 68%
+    );
+    filter: blur(12px);
+    opacity: 0;
+    transform: scale(0.7);
+    transition:
+      opacity 1s ease,
+      transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .acceptance-envelope {
+    position: relative;
+    width: min(25rem, 88vw);
+    aspect-ratio: 1.48;
+    transform: translateY(3rem) rotateX(10deg) scale(0.92);
+    transform-style: preserve-3d;
+    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .acceptance-letter {
+    position: absolute;
+    z-index: 1;
+    left: 9%;
+    bottom: 9%;
+    width: 82%;
+    min-height: 88%;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid color-mix(in oklab, var(--gold) 55%, var(--border));
+    background: #fffdf7;
+    box-shadow: 0 28px 50px -30px color-mix(in oklab, var(--primary) 55%, transparent);
+    color: var(--primary);
+    transform: translateY(20%) rotateX(3deg);
+    transform-origin: bottom center;
+    transition: transform 1.25s 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .acceptance-letter-header,
+  .acceptance-signature {
+    display: flex;
+    align-items: center;
+  }
+  .acceptance-letter-header {
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-size: 0.52rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .acceptance-letter-mark {
+    display: grid;
+    width: 1.65rem;
+    height: 1.65rem;
+    place-items: center;
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    color: var(--gold);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+  }
+  .acceptance-letter-rule {
+    height: 1px;
+    margin: 1.2rem 0 1.35rem;
+    background: color-mix(in oklab, var(--gold) 60%, transparent);
+  }
+  .acceptance-letter-kicker {
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--primary) 65%, var(--gold));
+  }
+  .acceptance-letter h3 {
+    margin-top: 0.8rem;
+    font-size: clamp(1.65rem, 4vw, 2.45rem);
+    line-height: 1;
+    font-style: italic;
+  }
+  .acceptance-letter > p:not(.acceptance-letter-kicker) {
+    max-width: 18rem;
+    margin-top: 1rem;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .acceptance-letter-signature {
+    gap: 0.45rem;
+    margin-top: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-foreground);
+  }
+  .acceptance-envelope-pocket {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--gold) 34%, var(--primary));
+    border-radius: 0.35rem;
+    background: linear-gradient(145deg, #303f69, #151f3e);
+    box-shadow: 0 32px 55px -26px color-mix(in oklab, var(--primary) 70%, transparent);
+    clip-path: polygon(0 0, 50% 48%, 100% 0, 100% 100%, 0 100%);
+  }
+  .acceptance-envelope-flap {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 58%;
+    border: 1px solid color-mix(in oklab, var(--gold) 34%, var(--primary));
+    border-radius: 0.35rem 0.35rem 0 0;
+    background: linear-gradient(155deg, #3f4f7d, #202c53);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .acceptance-stage-caption {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--muted-foreground);
+    font-family: var(--font-display);
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .acceptance-stage-caption svg {
+    color: var(--gold);
+  }
+  .acceptance-moment.is-visible .acceptance-stage-glow {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .acceptance-moment.is-visible .acceptance-envelope {
+    transform: translateY(0) rotateX(0) scale(1);
+  }
+  .acceptance-moment.is-visible .acceptance-letter {
+    transform: translateY(-18%) rotateX(0);
+  }
+  .acceptance-moment.is-visible .acceptance-envelope-flap {
+    transform: rotateX(180deg);
+  }
+  @media (min-width: 900px) {
+    .acceptance-moment-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1fr);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .acceptance-stage-glow,
+    .acceptance-envelope,
+    .acceptance-letter,
+    .acceptance-envelope-flap {
+      transition: none;
+    }
+    .acceptance-envelope {
+      transform: none;
+    }
+    .acceptance-stage-glow {
+      opacity: 1;
+      transform: none;
+    }
+    .acceptance-letter {
+      transform: translateY(-12%);
+    }
+    .acceptance-envelope-flap {
+      transform: rotateX(180deg);
+    }
+  }
   @media (min-width: 768px) {
     .promise-proof-row {
       grid-template-columns: repeat(3, minmax(0, 1fr));

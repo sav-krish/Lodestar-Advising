@@ -18,6 +18,7 @@ import { CollegeMarquee } from "@/components/CollegeMarquee";
 import { ScrollCanvasBackdrop, ScrollScrub } from "@/components/ScrollEffects";
 import { ReviewsSection, reviews } from "@/components/ReviewsSection";
 import { totalReviewCount, averageRating } from "@/data/reviews";
+import { AcceptanceLetter } from "@/components/AcceptanceLetter";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -154,7 +155,6 @@ function Home() {
           <div className="absolute inset-0 bg-gradient-hero opacity-90" />
         </div>
         <div className="relative container-prose py-32 md:py-44 text-primary-foreground">
-
           <h1
             className="mt-6 font-serif text-5xl md:text-7xl leading-[1.05] max-w-4xl italic animate-fade-up"
             style={{ animationDelay: "0.15s" }}
@@ -165,7 +165,8 @@ function Home() {
             className="mt-6 max-w-2xl text-lg text-primary-foreground leading-relaxed font-serif animate-fade-up"
             style={{ animationDelay: "0.4s" }}
           >
-            Work directly with Krish Sav on your essays, college search, and admissions questions. Choose a flexible hour or ten focused essay classes.
+            Work directly with Krish Sav on your essays, college search, and admissions questions.
+            Choose a flexible hour or ten focused essay classes.
           </p>
           <div
             className="mt-10 flex flex-wrap gap-4 animate-fade-up"
@@ -207,20 +208,22 @@ function Home() {
       {/* Founder note */}
       <section className="section-fade-in">
         <div className="container-prose py-24">
-        <ScrollScrub strength={18}>
-        <Reveal effect="soft" className="max-w-3xl mx-auto text-center">
-          <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-            The Playbook Behind Every Student
-          </span>
-          <div className="gold-divider mx-auto mt-6" />
-          <p className="mt-8 font-serif text-2xl md:text-3xl italic leading-snug text-foreground">
-            "We translate hard-won admissions experience into real student outcomes. Families come to us for the strategy, stay for the results, and leave with acceptances they once thought were out of reach."
-          </p>
-          <p className="mt-8 text-sm uppercase tracking-[0.3em] text-muted-foreground font-display">
-            Krish Sav, Founder
-          </p>
-        </Reveal>
-        </ScrollScrub>
+          <ScrollScrub strength={18}>
+            <Reveal effect="soft" className="max-w-3xl mx-auto text-center">
+              <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
+                The Playbook Behind Every Student
+              </span>
+              <div className="gold-divider mx-auto mt-6" />
+              <p className="mt-8 font-serif text-2xl md:text-3xl italic leading-snug text-foreground">
+                "We translate hard-won admissions experience into real student outcomes. Families
+                come to us for the strategy, stay for the results, and leave with acceptances they
+                once thought were out of reach."
+              </p>
+              <p className="mt-8 text-sm uppercase tracking-[0.3em] text-muted-foreground font-display">
+                Krish Sav, Founder
+              </p>
+            </Reveal>
+          </ScrollScrub>
         </div>
       </section>
 
@@ -307,6 +310,8 @@ function Home() {
         </ScrollScrub>
       </section>
 
+      <AcceptanceLetter />
+
       {/* Visual separator */}
       <div className="bg-primary py-8">
         <div className="container-prose">
@@ -357,7 +362,8 @@ function Home() {
               <p className="mt-8 font-serif text-lg md:text-xl leading-relaxed text-muted-foreground">
                 Every Lodestar family receives the founder directly on every revision, a transparent
                 timeline of milestones, and a roadmap that adapts as your story grows. We measure
-                success in acceptance letters won for students and scholarship dollars secured, not billable hours.
+                success in acceptance letters won for students and scholarship dollars secured, not
+                billable hours.
               </p>
               <div className="promise-proof-row" aria-label="Lodestar Promise pillars">
                 {["Founder revisions", "Transparent milestones", "Adaptive roadmap"].map((item) => (
@@ -423,7 +429,6 @@ function Home() {
             Begin Your Journey
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </a>
-
         </Reveal>
       </section>
     </>
