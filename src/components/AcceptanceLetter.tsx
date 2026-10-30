@@ -64,7 +64,7 @@ export function AcceptanceLetter() {
           >
             <div className="acceptance-stage-glow" aria-hidden="true" />
             <div className="acceptance-confetti" aria-hidden="true">
-              {Array.from({ length: 18 }, (_, index) => (
+              {Array.from({ length: 24 }, (_, index) => (
                 <span key={index} />
               ))}
             </div>

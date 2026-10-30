@@ -455,6 +455,15 @@
   .acceptance-confetti span:nth-child(3n + 2) {
     --confetti-color: #43b9a2;
   }
+  .acceptance-confetti span:nth-child(5n) {
+    --confetti-color: #ff9f43;
+  }
+  .acceptance-confetti span:nth-child(7n) {
+    --confetti-color: #4f8cff;
+  }
+  .acceptance-confetti span:nth-child(11n) {
+    --confetti-color: #f2c94c;
+  }
   .acceptance-confetti span:nth-child(1) {
     --confetti-x: -12rem;
     --confetti-y: -9rem;
@@ -544,6 +553,36 @@
     --confetti-x: 1rem;
     --confetti-y: -14rem;
     --confetti-rotate: 18deg;
+  }
+  .acceptance-confetti span:nth-child(19) {
+    --confetti-x: -15rem;
+    --confetti-y: -8rem;
+    --confetti-rotate: 64deg;
+  }
+  .acceptance-confetti span:nth-child(20) {
+    --confetti-x: 15rem;
+    --confetti-y: -8rem;
+    --confetti-rotate: 116deg;
+  }
+  .acceptance-confetti span:nth-child(21) {
+    --confetti-x: -15rem;
+    --confetti-y: 8rem;
+    --confetti-rotate: 22deg;
+  }
+  .acceptance-confetti span:nth-child(22) {
+    --confetti-x: 15rem;
+    --confetti-y: 9rem;
+    --confetti-rotate: 148deg;
+  }
+  .acceptance-confetti span:nth-child(23) {
+    --confetti-x: -7rem;
+    --confetti-y: -15rem;
+    --confetti-rotate: 88deg;
+  }
+  .acceptance-confetti span:nth-child(24) {
+    --confetti-x: 8rem;
+    --confetti-y: -15rem;
+    --confetti-rotate: 38deg;
   }
   @keyframes acceptance-confetti-burst {
     0% {
@@ -717,7 +756,8 @@
     transform: translateY(0) rotateX(0) scale(1);
   }
   .acceptance-moment.is-visible .acceptance-letter {
-    transform: translateY(-18%) rotateX(0);
+    z-index: 4;
+    transform: translateY(-58%) rotateX(0);
   }
   .acceptance-moment.is-visible .acceptance-envelope-flap {
     transform: rotateX(180deg);
@@ -758,7 +798,8 @@
       transform: none;
     }
     .acceptance-letter {
-      transform: translateY(-12%);
+      z-index: 4;
+      transform: translateY(-58%);
     }
     .acceptance-envelope-flap {
       transform: rotateX(180deg);
