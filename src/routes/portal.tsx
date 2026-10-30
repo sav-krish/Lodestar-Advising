@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { CalendarDays, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { CalendarDays, CheckCircle2, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { calcomBookingUrl, supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/portal")({
@@ -26,6 +26,13 @@ type Payment = {
   receipt_path: string | null;
   created_at: string;
 };
+type Booking = {
+  id: string;
+  student_id: string;
+  starts_at: string | null;
+  status: "scheduled" | "completed" | "cancelled";
+  created_at: string;
+};
 
 const cutoff = new Date("2026-11-16T00:00:00-06:00");
 const hourPrice = () => (new Date() >= cutoff ? 6000 : 5000);
@@ -34,6 +41,7 @@ function Portal() {
   const [session, setSession] = useState<{ user: { id: string; email?: string } } | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [creditCount, setCreditCount] = useState(0);
   const [message, setMessage] = useState("");
   const [authMode, setAuthMode] = useState<"sign-in" | "sign-up">("sign-in");
@@ -58,13 +66,14 @@ function Portal() {
     const client = supabase;
     if (!client || !session) return;
     const load = async () => {
-      const [profileResult, paymentResult, creditResult] = await Promise.all([
+      const [profileResult, paymentResult, creditResult, bookingResult] = await Promise.all([
         client.from("profiles").select("*").eq("id", session.user.id).single(),
         client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
         client
           .from("booking_credits")
           .select("credits_total, credits_used")
           .eq("student_id", session.user.id),
+        client.from("bookings").select("*").order("created_at", { ascending: false }),
       ]);
       if (profileResult.error) setMessage(profileResult.error.message);
       setProfile(profileResult.data);
@@ -75,6 +84,7 @@ function Portal() {
           0,
         ),
       );
+      setBookings(bookingResult.data ?? []);
     };
     void load();
   }, [session]);
@@ -184,9 +194,52 @@ function Portal() {
         </button>
       </div>
       {profile.role === "admin" ? (
-        <AdminPanel payments={payments} onMessage={setMessage} />
+        <AdminPanel payments={payments} bookings={bookings} onMessage={setMessage} />
       ) : (
         <div className="portal-grid">
+          <section className="portal-card portal-progress-card">
+            <p className="portal-eyebrow">
+              <CheckCircle2 size={15} /> Your progress
+            </p>
+            <h2>
+              {bookings.filter((booking) => booking.status === "completed").length} classes
+              completed
+            </h2>
+            <div className="portal-progress-track" aria-label="Completed class progress">
+              <span
+                style={{
+                  width: `${Math.min(
+                    100,
+                    bookings.filter((booking) => booking.status === "completed").length * 10,
+                  )}%`,
+                }}
+              />
+            </div>
+            <p className="portal-muted">
+              {bookings.filter((booking) => booking.status === "scheduled").length > 0
+                ? "You have a session on the calendar. We will update your progress after it is complete."
+                : "Completed sessions and upcoming bookings will appear here."}
+            </p>
+          </section>
+          <section className="portal-card portal-progress-card">
+            <p className="portal-eyebrow">Session history</p>
+            <h2>
+              {bookings.length} total session{bookings.length === 1 ? "" : "s"}
+            </h2>
+            <div className="portal-session-list">
+              {bookings.slice(0, 4).map((booking) => (
+                <div className="portal-session-row" key={booking.id}>
+                  <span>
+                    {booking.starts_at
+                      ? new Date(booking.starts_at).toLocaleDateString()
+                      : "Date pending"}
+                  </span>
+                  <strong>{booking.status}</strong>
+                </div>
+              ))}
+              {bookings.length === 0 && <p className="portal-muted">No sessions recorded yet.</p>}
+            </div>
+          </section>
           <section className="portal-card portal-card-wide">
             <p className="portal-eyebrow">Your next step</p>
             <h2>
@@ -318,13 +371,16 @@ function MaterialUpload({
 
 function AdminPanel({
   payments,
+  bookings,
   onMessage,
 }: {
   payments: Payment[];
+  bookings: Booking[];
   onMessage: (message: string) => void;
 }) {
   const [items, setItems] = useState(payments);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [bookingItems, setBookingItems] = useState(bookings);
 
   const review = async (payment: Payment, status: "approved" | "rejected") => {
     if (!supabase) return;
@@ -341,6 +397,23 @@ function AdminPanel({
       onMessage(
         status === "approved" ? "Payment approved and credit created." : "Payment rejected.",
       );
+    }
+    setBusyId(null);
+  };
+
+  const markCompleted = async (booking: Booking) => {
+    if (!supabase) return;
+    setBusyId(booking.id);
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: "completed" })
+      .eq("id", booking.id);
+    if (error) onMessage(error.message);
+    else {
+      setBookingItems((current) =>
+        current.map((item) => (item.id === booking.id ? { ...item, status: "completed" } : item)),
+      );
+      onMessage("Session marked completed.");
     }
     setBusyId(null);
   };
@@ -374,6 +447,35 @@ function AdminPanel({
                 ${(payment.amount_cents / 100).toFixed(0)} · {payment.status} ·{" "}
                 {new Date(payment.created_at).toLocaleDateString()}
               </p>
+            </div>
+            <div className="portal-admin-list">
+              <p className="portal-eyebrow">Session tracking</p>
+              {bookingItems.length === 0 && (
+                <p className="portal-muted">No sessions recorded yet.</p>
+              )}
+              {bookingItems.map((booking) => (
+                <article className="portal-admin-row" key={booking.id}>
+                  <div>
+                    <strong>
+                      {booking.starts_at
+                        ? new Date(booking.starts_at).toLocaleString()
+                        : "Date pending"}
+                    </strong>
+                    <p className="portal-muted">{booking.student_id}</p>
+                  </div>
+                  {booking.status === "scheduled" ? (
+                    <button
+                      className="portal-button"
+                      disabled={busyId === booking.id}
+                      onClick={() => void markCompleted(booking)}
+                    >
+                      Mark completed
+                    </button>
+                  ) : (
+                    <span className="portal-status">{booking.status}</span>
+                  )}
+                </article>
+              ))}
             </div>
             <div className="portal-admin-actions">
               {payment.receipt_path && (

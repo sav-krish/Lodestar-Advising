@@ -415,6 +415,46 @@
   .portal-card-wide {
     grid-column: 1 / -1;
   }
+  .portal-progress-card {
+    min-height: 15rem;
+  }
+  .portal-progress-track {
+    height: 0.45rem;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--gold) 18%, var(--border));
+  }
+  .portal-progress-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--gold), var(--primary));
+    transition: width 400ms ease;
+  }
+  .portal-session-list {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 1.4rem;
+  }
+  .portal-session-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.7rem;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+  }
+  .portal-session-row strong,
+  .portal-status {
+    color: var(--gold-foreground);
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
   .portal-card h2 {
     margin-top: 0.65rem;
     color: var(--primary);
@@ -582,6 +622,9 @@
   .portal-admin-actions .portal-text-button {
     margin-top: 0;
     font-size: 0.75rem;
+  }
+  .portal-admin-list > .portal-eyebrow {
+    margin-top: 1.75rem;
   }
   @media (max-width: 700px) {
     .portal-heading {
