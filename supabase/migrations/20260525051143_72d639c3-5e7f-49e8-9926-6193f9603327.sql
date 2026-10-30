@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Authenticated users can read consultation requests" ON public.consultation_requests;
