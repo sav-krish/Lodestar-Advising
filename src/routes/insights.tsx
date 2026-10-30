@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, SectionFadeIn } from "@/components/PageSections";
@@ -21,6 +21,12 @@ export const Route = createFileRoute("/insights")({
 });
 
 function Insights() {
+  const { pathname } = useLocation();
+
+  if (pathname !== "/insights") {
+    return <Outlet />;
+  }
+
   return (
     <>
       <PageHero>
