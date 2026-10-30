@@ -735,7 +735,7 @@
     gap: 45px;
   }
   .home-hero h1 {
-    font-size: 6rem;
+    font-size: clamp(4.75rem, 7.5vw, 6rem);
   }
   .home-hero-image-wrap {
     min-height: 590px;
