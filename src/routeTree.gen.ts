@@ -15,6 +15,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResultsRouteImport } from './routes/results'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -50,6 +51,11 @@ const InsightsRoute = InsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/results': typeof ResultsRoute
   '/services': typeof ServicesRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/results': typeof ResultsRoute
   '/services': typeof ServicesRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/events': typeof EventsRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/portal': typeof PortalRoute
   '/privacy': typeof PrivacyRoute
   '/results': typeof ResultsRoute
   '/services': typeof ServicesRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/faq'
     | '/insights'
+    | '/portal'
     | '/privacy'
     | '/results'
     | '/services'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/faq'
     | '/insights'
+    | '/portal'
     | '/privacy'
     | '/results'
     | '/services'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/faq'
     | '/insights'
+    | '/portal'
     | '/privacy'
     | '/results'
     | '/services'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   EventsRoute: typeof EventsRoute
   FaqRoute: typeof FaqRoute
   InsightsRoute: typeof InsightsRouteWithChildren
+  PortalRoute: typeof PortalRoute
   PrivacyRoute: typeof PrivacyRoute
   ResultsRoute: typeof ResultsRoute
   ServicesRoute: typeof ServicesRoute
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -253,6 +273,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRoute: EventsRoute,
   FaqRoute: FaqRoute,
   InsightsRoute: InsightsRouteWithChildren,
+  PortalRoute: PortalRoute,
   PrivacyRoute: PrivacyRoute,
   ResultsRoute: ResultsRoute,
   ServicesRoute: ServicesRoute,

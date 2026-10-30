@@ -113,6 +113,11 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     description:
       "Lodestar Advising insights on the 2026 to 2027 admissions cycle, application strategy, AI and authenticity, and selective college preparation.",
   },
+  "/portal": {
+    title: "Lodestar Student Portal",
+    description:
+      "Secure Lodestar Advising student portal for payments, materials, and session scheduling.",
+  },
 };
 
 function SeoManager() {

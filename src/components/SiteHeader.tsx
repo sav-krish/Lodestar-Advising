@@ -53,6 +53,12 @@ export function SiteHeader() {
           <Link to="/contact" className="site-nav-cta">
             Book a consultation <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
+          <Link
+            to="/portal"
+            className="text-[0.7rem] font-display uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-smooth"
+          >
+            Student Portal
+          </Link>
         </nav>
         <button
           ref={toggle}
