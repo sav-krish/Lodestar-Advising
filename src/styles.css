@@ -397,9 +397,10 @@
   .acceptance-stage {
     position: relative;
     display: grid;
-    min-height: 31rem;
+    min-height: 36rem;
     place-items: center;
     perspective: 1200px;
+    overflow: hidden;
   }
   .acceptance-stage-glow {
     position: absolute;
@@ -423,7 +424,7 @@
     width: min(25rem, 88vw);
     aspect-ratio: 1.48;
     opacity: 0;
-    transform: translateY(3rem) rotateX(10deg) scale(0.92);
+    transform: translateY(2.5rem) rotateX(10deg) scale(0.92);
     transform-style: preserve-3d;
     transition:
       opacity 0.45s ease,
@@ -753,11 +754,11 @@
   }
   .acceptance-moment.is-visible .acceptance-envelope {
     opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
+    transform: translateY(2.5rem) rotateX(0) scale(1);
   }
   .acceptance-moment.is-visible .acceptance-letter {
     z-index: 4;
-    transform: translateY(-58%) rotateX(0);
+    transform: translateY(-26%) rotateX(0);
   }
   .acceptance-moment.is-visible .acceptance-envelope-flap {
     transform: rotateX(180deg);
@@ -799,7 +800,7 @@
     }
     .acceptance-letter {
       z-index: 4;
-      transform: translateY(-58%);
+      transform: translateY(-26%);
     }
     .acceptance-envelope-flap {
       transform: rotateX(180deg);
