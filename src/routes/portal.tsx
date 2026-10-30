@@ -154,7 +154,7 @@ function Portal() {
   if (!configured)
     return (
       <PortalShell>
-        <Notice text="The portal is not connected yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel before enabling student access." />
+        <Notice text="The portal is not connected yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel before enabling student access." />
       </PortalShell>
     );
   if (!session)
