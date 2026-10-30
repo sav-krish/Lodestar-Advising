@@ -400,6 +400,9 @@
     font-style: italic;
     line-height: 1;
   }
+  .portal-heading-note {
+    margin-top: 0.75rem;
+  }
   .portal-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -540,6 +543,9 @@
   .portal-auth {
     max-width: 34rem;
     margin: 0 auto;
+  }
+  .portal-auth .portal-muted {
+    max-width: 28rem;
   }
   .portal-divider {
     display: flex;

@@ -205,9 +205,14 @@ function Portal() {
       <div className="portal-heading">
         <div>
           <p className="portal-eyebrow">
-            {profile.role === "admin" ? "Lodestar administration" : "Student portal"}
+            {profile.role === "admin" ? "Owner portal" : "Student portal"}
           </p>
-          <h1>{profile.full_name || profile.email}</h1>
+          <h1>{profile.role === "admin" ? "Owner dashboard" : "Your Lodestar workspace"}</h1>
+          <p className="portal-muted portal-heading-note">
+            {profile.role === "admin"
+              ? "Review payments, manage credits, and keep student sessions up to date."
+              : `Signed in as ${profile.full_name || profile.email}.`}
+          </p>
         </div>
         <button
           className="portal-button portal-button-secondary"
@@ -484,35 +489,6 @@ function AdminPanel({
                 {new Date(payment.created_at).toLocaleDateString()}
               </p>
             </div>
-            <div className="portal-admin-list">
-              <p className="portal-eyebrow">Session tracking</p>
-              {bookingItems.length === 0 && (
-                <p className="portal-muted">No sessions recorded yet.</p>
-              )}
-              {bookingItems.map((booking) => (
-                <article className="portal-admin-row" key={booking.id}>
-                  <div>
-                    <strong>
-                      {booking.starts_at
-                        ? new Date(booking.starts_at).toLocaleString()
-                        : "Date pending"}
-                    </strong>
-                    <p className="portal-muted">{booking.student_id}</p>
-                  </div>
-                  {booking.status === "scheduled" ? (
-                    <button
-                      className="portal-button"
-                      disabled={busyId === booking.id}
-                      onClick={() => void markCompleted(booking)}
-                    >
-                      Mark completed
-                    </button>
-                  ) : (
-                    <span className="portal-status">{booking.status}</span>
-                  )}
-                </article>
-              ))}
-            </div>
             <div className="portal-admin-actions">
               {payment.receipt_path && (
                 <button
@@ -544,6 +520,31 @@ function AdminPanel({
           </article>
         ))}
       </div>
+      <div className="portal-admin-list">
+        <p className="portal-eyebrow">Session tracking</p>
+        {bookingItems.length === 0 && <p className="portal-muted">No sessions recorded yet.</p>}
+        {bookingItems.map((booking) => (
+          <article className="portal-admin-row" key={booking.id}>
+            <div>
+              <strong>
+                {booking.starts_at ? new Date(booking.starts_at).toLocaleString() : "Date pending"}
+              </strong>
+              <p className="portal-muted">{booking.student_id}</p>
+            </div>
+            {booking.status === "scheduled" ? (
+              <button
+                className="portal-button"
+                disabled={busyId === booking.id}
+                onClick={() => void markCompleted(booking)}
+              >
+                Mark completed
+              </button>
+            ) : (
+              <span className="portal-status">{booking.status}</span>
+            )}
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
@@ -565,7 +566,12 @@ function AuthCard({
   return (
     <section className="portal-card portal-auth">
       <p className="portal-eyebrow">Lodestar secure access</p>
-      <h1>{mode === "sign-in" ? "Welcome back." : "Create your student account."}</h1>
+      <h1>{mode === "sign-in" ? "Sign in to your portal." : "Create your student account."}</h1>
+      <p className="portal-muted">
+        {mode === "sign-in"
+          ? "Use your Lodestar email and password to continue."
+          : "Create an account to submit payments, upload materials, and manage sessions."}
+      </p>
       <button className="portal-button portal-button-secondary" onClick={onGoogle}>
         <LogIn size={16} /> Continue with Google
       </button>
