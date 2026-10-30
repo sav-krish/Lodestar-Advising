@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, SectionFadeIn } from "@/components/PageSections";
@@ -59,14 +59,15 @@ function Insights() {
                   <p className="mt-4 flex-1 font-serif text-base leading-relaxed text-muted-foreground">
                     {insight.dek}
                   </p>
-                  <a
-                    href={`/#/insights/${insight.slug}`}
+                  <Link
+                    to="/insights/$slug"
+                    params={{ slug: insight.slug }}
                     aria-label={`Read ${insight.title}`}
                     className="mt-8 inline-flex items-center gap-2 font-display text-xs uppercase tracking-[0.18em] text-primary transition-smooth group-hover:text-gold"
                   >
                     Read the brief
                     <ArrowUpRight size={16} />
-                  </a>
+                  </Link>
                 </article>
               </Reveal>
             ))}

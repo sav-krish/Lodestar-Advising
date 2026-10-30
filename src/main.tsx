@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createRouter, RouterProvider, createHashHistory } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
+import { legacyHashPath } from "./lib/legacy-path";
+
+const legacyPath = legacyHashPath(window.location.hash);
+if (legacyPath) window.history.replaceState(null, "", legacyPath);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +21,6 @@ const queryClient = new QueryClient({
 
 const router = createRouter({
   routeTree,
-  history: createHashHistory(),
   context: { queryClient },
   scrollRestoration: true,
   defaultPreloadStaleTime: 0,

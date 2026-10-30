@@ -4,7 +4,7 @@ import logo from "@/assets/lodestar-wordmark.png";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border bg-primary text-primary-foreground">
+    <footer className="site-footer border-t border-border bg-primary text-primary-foreground">
       <div className="container-prose py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
@@ -14,8 +14,8 @@ export function SiteFooter() {
             </span>
           </div>
           <p className="mt-4 text-sm text-primary-foreground max-w-sm font-serif italic leading-relaxed">
-            Lodestar Advising: premium Ivy League admissions prep and founder-led college counseling
-            for ambitious students aiming for the world's most selective universities.
+            Personal college admissions guidance and essay coaching, directly with Krish Sav. Your
+            questions. Your voice. Your next chapter.
           </p>
           <div className="mt-4 flex items-center gap-4">
             <a
@@ -83,8 +83,12 @@ export function SiteFooter() {
             Contact
           </h4>
           <ul className="space-y-2 text-sm text-primary-foreground">
-            <li>advising.lodestar@gmail.com</li>
-            <li>+1 (608) 421-3736</li>
+            <li>
+              <a href="mailto:advising.lodestar@gmail.com">advising.lodestar@gmail.com</a>
+            </li>
+            <li>
+              <a href="tel:+16084213736">+1 (608) 421-3736</a>
+            </li>
             <li>Mon to Sat · 9am to 8pm CST</li>
           </ul>
         </div>

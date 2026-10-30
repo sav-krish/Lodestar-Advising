@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import logo from "@/assets/lodestar-wordmark.png";
 
 const links = [
@@ -14,55 +14,76 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
-      <div className="container-prose flex items-center justify-between h-20">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img
-            src={logo}
-            alt="Lodestar logo"
-            className="h-9 w-auto object-contain group-hover:scale-105 transition-smooth"
-          />
-          <span className="font-display text-sm tracking-[0.16em] uppercase text-foreground">
-            Lodestar Advising
-          </span>
+    <header className="site-header">
+      <div className="container-prose site-header-inner">
+        <Link to="/" className="site-wordmark" aria-label="Lodestar Advising home">
+          <img src={logo} alt="" width={36} height={36} />
+          <span>Lodestar Advising</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
+        <nav className="site-desktop-nav" aria-label="Main navigation">
+          {links.map((link) => (
             <Link
-              key={l.to}
-              to={l.to}
-              className="link-underline text-[0.7rem] font-display uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-smooth"
-              activeProps={{ className: "text-foreground" }}
-              activeOptions={{ exact: l.to === "/" }}
+              key={link.to}
+              to={link.to}
+              className="site-nav-link"
+              activeProps={{ "aria-current": "page" }}
+              activeOptions={{ exact: link.to === "/" }}
             >
-              {l.label}
+              {link.label}
             </Link>
           ))}
-          <Link
-            to="/contact"
-            className="inline-flex items-center px-5 py-2.5 rounded-md bg-primary text-primary-foreground text-[0.7rem] font-semibold uppercase tracking-[0.2em] font-display hover:opacity-90 transition-smooth shadow-soft"
-          >
-            Book Consultation
+          <Link to="/contact" className="site-nav-cta">
+            Book a consultation <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
         </nav>
-        <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X size={22} /> : <Menu size={22} />}
+        <button
+          ref={toggle}
+          type="button"
+          className="site-menu-toggle"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-controls="site-mobile-nav"
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          {open ? <X size={23} /> : <Menu size={23} />}
         </button>
       </div>
       {open && (
-        <nav className="md:hidden border-t border-border bg-background">
-          <div className="container-prose py-4 flex flex-col gap-3">
-            {links.map((l) => (
+        <nav id="site-mobile-nav" className="site-mobile-nav" aria-label="Mobile navigation">
+          <div className="container-prose">
+            {links.map((link) => (
               <Link
-                key={l.to}
-                to={l.to}
+                key={link.to}
+                to={link.to}
                 onClick={() => setOpen(false)}
-                className="py-2 text-foreground font-display uppercase tracking-[0.2em] text-sm"
+                className="site-nav-link"
+                activeProps={{ "aria-current": "page" }}
+                activeOptions={{ exact: link.to === "/" }}
               >
-                {l.label}
+                {link.label}
               </Link>
             ))}
+            <Link to="/contact" onClick={() => setOpen(false)} className="site-nav-cta">
+              Book a consultation <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
           </div>
         </nav>
       )}

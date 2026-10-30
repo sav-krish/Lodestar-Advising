@@ -1,41 +1,73 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroImg from "@/assets/hero-campus.gif";
-import {
-  GraduationCap,
-  Target,
-  ArrowRight,
-  Award,
-  BookMarked,
-  Compass,
-  PenLine,
-  Trophy,
-  ShieldCheck,
-  HelpCircle,
-} from "lucide-react";
+import { ArrowDownRight, ArrowRight, Check, ExternalLink, Star } from "lucide-react";
+import heroImg from "@/assets/hero-campus.jpg";
+import founderImg from "@/assets/krish-sav-founder.jpg";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { CollegeMarquee } from "@/components/CollegeMarquee";
-import { ScrollCanvasBackdrop, ScrollScrub } from "@/components/ScrollEffects";
-import { ReviewsSection, reviews } from "@/components/ReviewsSection";
-import { totalReviewCount, averageRating } from "@/data/reviews";
 import { AcceptanceLetter } from "@/components/AcceptanceLetter";
+import { clientsHelped, programs } from "@/data/programs";
+import { reviews, featuredReviews, totalReviewCount, averageRating } from "@/data/reviews";
+import "@/styles/home.css";
+
+const consultationUrl = "https://cal.com/krish-s/lodestar?overlayCalendar=true";
+
+const faqs = [
+  {
+    q: "Where should I start?",
+    a: "Start with a free, 30-minute consultation with Krish. Bring your questions, share what you are working on, and talk through which session format fits your needs. There is no registration fee.",
+  },
+  {
+    q: "What can we cover in The Lodestar Hour?",
+    a: "The one-hour session is flexible: Common App and supplemental essays, an activities list, resume feedback, college search, scholarship support, or your admissions questions. You choose what needs attention.",
+  },
+  {
+    q: "How does the Essay Package work?",
+    a: "The Lodestar Essay Package includes ten 30-minute classes with Krish, focused only on essays. Work on brainstorming, structure, writing, and revision for your Common App and supplemental essays. The package has a discounted equivalent hourly rate compared with The Lodestar Hour; contact us for current pricing.",
+  },
+  {
+    q: "Who will I work with?",
+    a: "You work directly with Lodestar founder Krish Sav. Sessions are personal, with space to ask questions and understand the feedback. You remain the author of your application and your essays.",
+  },
+  {
+    q: "Can we meet remotely?",
+    a: "Yes. Consultations and sessions are virtual. Sessions are scheduled around school and family commitments, Monday to Saturday, 9am to 8pm Central Time.",
+  },
+];
+
+const process = [
+  {
+    step: "01",
+    title: "Bring your questions.",
+    body: "Meet Krish in a free consultation. Share where you are in the process and what would help you move forward.",
+  },
+  {
+    step: "02",
+    title: "Choose your focus.",
+    body: "Use a flexible hour for admissions questions, or ten shorter classes to develop your essays. Choose the support that fits.",
+  },
+  {
+    step: "03",
+    title: "Leave with a next step.",
+    body: "Work through ideas and feedback together. Understand the reasoning behind each edit, then make the work your own.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { title: "Lodestar Advising | Premium Ivy League Admissions Prep & College Counseling" },
+      { title: "Lodestar Advising | Personal College Admissions & Essay Coaching" },
       {
         name: "description",
-        content:
-          "Lodestar Advising: premium, founder-led college admissions counseling with 12+ elite acceptances, $600K+ in scholarships won for students, and 20+ clients helped. Also known as Lodestar, Lodestar College, Lodestar CCG, Lodestar Guidance.",
+        content: `Personal, founder-led college admissions guidance with Krish Sav. Choose a flexible hour or ten focused essay classes. ${clientsHelped}+ clients helped. Start with a free consultation.`,
       },
-      { property: "og:title", content: "Lodestar Advising | Premium Ivy League Admissions Prep" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Lodestar Advising | Your Story. Your Next Chapter." },
       {
         property: "og:description",
         content:
-          "Founder-led college admissions counseling. 12+ elite acceptances, $600K+ in scholarships, and 20+ clients helped.",
+          "Work directly with Krish Sav on college applications and essays. Personal guidance, clear next steps, and room for your own voice.",
       },
       { property: "og:url", content: "https://lodestaradvising.com/" },
     ],
@@ -80,6 +112,18 @@ export const Route = createFileRoute("/")({
             },
             reviewBody: r.text,
           })),
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Lodestar programs",
+            itemListElement: programs.map((p) => ({
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: p.name,
+                description: `${p.summary} ${p.points.join(". ")}.${p.discountedHourlyRate ? " Discounted equivalent hourly rate compared with The Lodestar Hour." : ""}`,
+              },
+            })),
+          },
         }),
       },
     ],
@@ -87,350 +131,385 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const process = [
-  {
-    icon: Compass,
-    step: "01",
-    title: "Discovery",
-    body: "A one on one diagnostic of academics, ambitions, and the story only you can tell.",
-  },
-  {
-    icon: Target,
-    step: "02",
-    title: "Strategy",
-    body: "A bespoke college list, course rigor plan, and scholarship roadmap built around your goals.",
-  },
-  {
-    icon: PenLine,
-    step: "03",
-    title: "Execution",
-    body: "Essays, supplements, activities, and interviews refined under founder led mentorship.",
-  },
-  {
-    icon: Trophy,
-    step: "04",
-    title: "Acceptance",
-    body: "We celebrate offers, weigh scholarships, and choose the campus that fits your future.",
-  },
-];
-
-const faqs = [
-  {
-    q: "Who is Lodestar for?",
-    a: "Ambitious freshmen, sophomores, juniors, and seniors aiming for top thirty universities, honors programs, and meaningful scholarship awards.",
-  },
-  {
-    q: "How is this different from a typical college counselor?",
-    a: "Every plan is built and delivered by the founder, Krish Sav, using a methodology that has produced 12+ elite college acceptances and $600K+ in scholarship offers for students. You work directly with the architect of the playbook, not a rotating associate.",
-  },
-  {
-    q: "Why Lodestar?",
-    a: "We believe premium guidance should not require premium pricing. Lodestar is more affordable than most major college consulting firms while delivering founder-led mentorship. Our track record includes 12+ elite acceptances and $600K+ in scholarships won for students; we bring that same rigor to every family we serve.",
-  },
-  {
-    q: "Do you work with families remotely?",
-    a: "Yes. All consultations are virtual, which means we serve families across every U.S. time zone and internationally.",
-  },
-  {
-    q: "What results have Lodestar students achieved?",
-    a: "Our students have earned 12+ acceptances to elite universities and won $600K+ in scholarship offers. We publish verified Google reviews from families so you can read about real outcomes before booking a call.",
-  },
-];
-
 function Home() {
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={heroImg}
-            alt="Ivy covered college campus at golden hour"
-            width={1600}
-            height={1024}
-            fetchPriority="high"
-            decoding="async"
-            className="hero-media w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-hero opacity-90" />
-        </div>
-        <div className="relative container-prose py-32 md:py-44 text-primary-foreground">
-          <h1
-            className="mt-6 font-serif text-5xl md:text-7xl leading-[1.05] max-w-4xl italic animate-fade-up"
-            style={{ animationDelay: "0.15s" }}
-          >
-            Lodestar Advising
-          </h1>
-          <p
-            className="mt-6 max-w-2xl text-lg text-primary-foreground leading-relaxed font-serif animate-fade-up"
-            style={{ animationDelay: "0.4s" }}
-          >
-            Work directly with Krish Sav on your essays, college search, and admissions questions.
-            Choose a flexible hour or ten focused essay classes.
-          </p>
-          <div
-            className="mt-10 flex flex-wrap gap-4 animate-fade-up"
-            style={{ animationDelay: "0.6s" }}
-          >
-            <a
-              href="https://cal.com/krish-s/lodestar?overlayCalendar=true"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-md shimmer-gold text-gold-foreground font-semibold shadow-elegant hover:-translate-y-0.5 transition-smooth font-display tracking-wider text-sm"
-            >
-              Book Free Consultation
-              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-            </a>
-
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-md border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 transition-smooth font-display tracking-wider text-sm"
-            >
-              Explore Programs
-            </Link>
-          </div>
-          <div className="mt-16 grid grid-cols-2 max-w-xl gap-8 border-t border-primary-foreground/15 pt-8">
-            {[
-              { k: "12+", v: "Elite College Acceptances" },
-              { k: "20+", v: "Clients Helped" },
-            ].map((s, i) => (
-              <Reveal key={s.v} delay={((i % 2) + 1) as 1 | 2}>
-                <div className="font-serif text-3xl text-gold italic">{s.k}</div>
-                <div className="text-[0.65rem] uppercase tracking-[0.2em] text-primary-foreground mt-2 font-display">
-                  {s.v}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Founder note */}
-      <section className="section-fade-in">
-        <div className="container-prose py-24">
-          <ScrollScrub strength={18}>
-            <Reveal effect="soft" className="max-w-3xl mx-auto text-center">
-              <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-                The Playbook Behind Every Student
-              </span>
-              <div className="gold-divider mx-auto mt-6" />
-              <p className="mt-8 font-serif text-2xl md:text-3xl italic leading-snug text-foreground">
-                "We translate hard-won admissions experience into real student outcomes. Families
-                come to us for the strategy, stay for the results, and leave with acceptances they
-                once thought were out of reach."
-              </p>
-              <p className="mt-8 text-sm uppercase tracking-[0.3em] text-muted-foreground font-display">
-                Krish Sav, Founder
-              </p>
-            </Reveal>
-          </ScrollScrub>
-        </div>
-      </section>
-
-      {/* Pillars */}
-      <section className="bg-primary text-primary-foreground py-24">
-        <div className="container-prose">
-          <Reveal effect="scale" className="text-center max-w-2xl mx-auto">
-            <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-              Our Approach
-            </span>
-            <h2 className="mt-4 text-4xl md:text-5xl italic">Excellence, individually crafted.</h2>
-            <div className="gold-divider mx-auto mt-6" />
-          </Reveal>
-          <div className="mt-16 grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Target,
-                title: "Strategic Diagnostics",
-                body: "We begin by mapping your strengths, gaps, and ambitions, building a roadmap as singular as your story.",
-              },
-              {
-                icon: GraduationCap,
-                title: "Founder Led Mentorship",
-                body: "Guidance from someone who lived the elite admissions journey, not a corporate script.",
-              },
-              {
-                icon: Award,
-                title: "Scholarship Strategy",
-                body: "Architected applications that don't just earn admission, they earn six figure scholarship offers.",
-              },
-            ].map((p, i) => (
-              <Reveal
-                key={p.title}
-                delay={(i + 1) as 1 | 2 | 3}
-                effect={i === 0 ? "left" : i === 1 ? "scale" : "right"}
+    <div className="home-page">
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="home-container home-hero-grid">
+          <div className="home-hero-copy">
+            <p className="home-eyebrow">
+              <span /> College guidance, made personal
+            </p>
+            <h1 id="home-title">
+              Your story.
+              <br />
+              <em>
+                Your next
+                <br className="home-hero-break" /> chapter.
+              </em>
+            </h1>
+            <p className="home-hero-description">
+              Thoughtful college admissions and essay coaching, directly with Krish Sav. Find your
+              direction, strengthen your application, and keep your own voice.
+            </p>
+            <div className="home-actions">
+              <a
+                href={consultationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="home-button home-button-gold"
               >
-                <div className="group p-8 rounded-xl bg-primary-foreground/[0.04] border border-primary-foreground/10 backdrop-blur-sm hover-lift hover:border-gold/40 h-full">
-                  <div className="w-12 h-12 rounded-md bg-gradient-gold flex items-center justify-center text-gold-foreground transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110">
-                    <p.icon size={22} />
-                  </div>
-                  <h3 className="mt-6 font-serif italic text-2xl text-primary-foreground">
-                    {p.title}
-                  </h3>
-                  <p className="mt-3 font-serif text-base leading-relaxed text-primary-foreground">
-                    {p.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+                Book a free consultation
+                <ArrowRight size={17} aria-hidden="true" />
+              </a>
+              <Link to="/" hash="programs" className="home-text-link">
+                Find your fit
+                <ArrowDownRight size={18} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="home-hero-proof">
+              <span
+                className="home-stars"
+                aria-label={`${averageRating.toFixed(1)} out of 5 stars`}
+              >
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} size={13} aria-hidden="true" />
+                ))}
+              </span>
+              <span>
+                <strong>{averageRating.toFixed(1)}</strong> on Google{" "}
+                <span className="home-proof-separator">/</span> {clientsHelped}+ clients helped
+              </span>
+            </div>
           </div>
+          <figure className="home-hero-visual">
+            <div className="home-hero-image-wrap">
+              <img
+                src={heroImg}
+                alt="Sunlight falling across an ivy-covered college campus"
+                width={1600}
+                height={1024}
+                fetchPriority="high"
+                decoding="async"
+                className="home-hero-image"
+              />
+            </div>
+            <figcaption>
+              <span>A little perspective. A new possibility.</span>
+              <span className="home-image-index">01 — THE NEXT CHAPTER</span>
+            </figcaption>
+            <div className="home-hero-seal" aria-hidden="true">
+              <span>YOUR STORY</span>
+              <svg viewBox="0 0 40 40" fill="none">
+                <path
+                  d="M20 2 23.8 16.2 38 20 23.8 23.8 20 38 16.2 23.8 2 20 16.2 16.2 20 2Z"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                />
+                <path
+                  d="m8 8 12 8 12-8-8 12 8 12-12-8-12 8 8-12-8-12Z"
+                  stroke="currentColor"
+                  strokeWidth=".6"
+                />
+              </svg>
+              <span>YOUR DIRECTION</span>
+            </div>
+          </figure>
         </div>
       </section>
 
-      {/* The Lodestar Process */}
-      <section className="container-prose py-24">
-        <Reveal effect="scale" className="text-center max-w-2xl mx-auto">
-          <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-            The Lodestar Process
-          </span>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl italic">
-            Four steps to your acceptance.
-          </h2>
-          <div className="gold-divider mx-auto mt-6" />
-        </Reveal>
-        <ScrollScrub className="mt-16 process-scrub" strength={24}>
-          <div className="grid md:grid-cols-4 gap-6 relative">
-            {process.map((p, i) => (
-              <Reveal key={p.title} delay={((i % 4) + 1) as 1 | 2 | 3 | 4} effect="scale">
-                <div className="group relative p-7 rounded-xl bg-card border border-border shadow-soft hover-lift hover:shadow-elegant hover:border-gold/50 h-full">
-                  <div className="font-display text-[0.65rem] tracking-[0.3em] text-gold">
-                    {p.step}
-                  </div>
-                  <div className="mt-4 w-11 h-11 rounded-md bg-gradient-gold flex items-center justify-center text-gold-foreground transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110">
-                    <p.icon size={20} />
-                  </div>
-                  <h3 className="mt-5 font-serif italic text-2xl text-primary">{p.title}</h3>
-                  <p className="mt-3 text-sm text-primary font-serif leading-relaxed font-medium">
-                    {p.body}
+      <section className="home-founder home-section" aria-labelledby="founder-title">
+        <div className="home-container home-founder-grid">
+          <figure className="home-founder-portrait">
+            <img
+              src={founderImg}
+              alt="Krish Sav, founder of Lodestar Advising"
+              width={1520}
+              height={2048}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>KRISH SAV</span>
+              <span>Founder & your advisor</span>
+            </figcaption>
+          </figure>
+          <Reveal className="home-founder-copy">
+            <p className="home-eyebrow">A real person in your corner</p>
+            <h2 id="founder-title">
+              Meet your advisor.
+              <br />
+              <em>And your sounding board.</em>
+            </h2>
+            <p className="home-lead">
+              College applications ask you to explain who you are. It helps to have someone who
+              takes the time to listen.
+            </p>
+            <p>
+              Krish navigated his own college applications without a private counselor. He founded
+              Lodestar to share that firsthand perspective with students and families who want a
+              clearer way forward.
+            </p>
+            <p>
+              From a first essay idea to an admissions question, you work with him directly. Talk it
+              through, understand the feedback, and make decisions that feel like your own.
+            </p>
+            <Link to="/about" className="home-text-link">
+              Get to know Krish
+              <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      <section
+        id="programs"
+        className="home-programs home-section"
+        aria-labelledby="programs-title"
+      >
+        <div className="home-container">
+          <div className="home-section-heading">
+            <div>
+              <p className="home-eyebrow">Two ways to work together</p>
+              <h2 id="programs-title">
+                Support for where
+                <br />
+                <em>you are right now.</em>
+              </h2>
+            </div>
+            <p>
+              One question or a stack of essay drafts. <br />
+              Make space for the work that matters next.
+            </p>
+          </div>
+          <div className="home-program-list">
+            {programs.map((program, index) => (
+              <article key={program.id} className="home-program">
+                <div className="home-program-intro">
+                  <span className="home-program-index">0{index + 1}</span>
+                  <p className="home-eyebrow">
+                    {program.scope === "essays-only"
+                      ? "Focused essay coaching"
+                      : "Flexible admissions support"}
                   </p>
+                  <h3>{program.name}</h3>
+                  <p>{program.summary}</p>
+                  <div className="home-program-duration">
+                    <strong>
+                      {program.sessionCount === 1 ? "1 session" : `${program.sessionCount} classes`}
+                    </strong>
+                    <span>{program.sessionMinutes} minutes each</span>
+                  </div>
                 </div>
-              </Reveal>
+                <div className="home-program-details">
+                  <ul>
+                    {program.points.map((point) => (
+                      <li key={point}>
+                        <Check size={16} aria-hidden="true" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="home-program-note">
+                    {program.discountedHourlyRate
+                      ? "A discounted equivalent hourly rate. Contact us for package pricing."
+                      : "Bring your priorities. Contact us for current session pricing."}
+                  </p>
+                  <Link to="/services" className="home-text-link">
+                    Explore {program.id === "hour" ? "the Hour" : "the Essay Package"}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
-        </ScrollScrub>
+          <p className="home-program-footnote">
+            Every session is with Krish. No registration fee.{" "}
+            <a href={consultationUrl} target="_blank" rel="noopener noreferrer">
+              Start with a free conversation <ArrowRight size={14} aria-hidden="true" />
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <WhyChooseUs />
+
+      <section className="home-process home-section" aria-labelledby="process-title">
+        <div className="home-container">
+          <div className="home-section-heading">
+            <div>
+              <p className="home-eyebrow">A clear way forward</p>
+              <h2 id="process-title">
+                Start with a conversation.
+                <br />
+                <em>Build from there.</em>
+              </h2>
+            </div>
+            <p>
+              You don’t need to have it all figured out. <br />
+              That’s a good place to begin.
+            </p>
+          </div>
+          <div className="home-process-grid">
+            {process.map((step) => (
+              <article key={step.step}>
+                <div className="home-process-number">
+                  <span>{step.step}</span>
+                  <ArrowRight size={22} aria-hidden="true" />
+                </div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <AcceptanceLetter />
 
-      {/* Visual separator */}
-      <div className="bg-primary py-8">
-        <div className="container-prose">
-          <div className="gold-divider mx-auto" />
-        </div>
-      </div>
-
-      {/* Acceptances banner */}
-      <section className="acceptances-section bg-primary text-primary-foreground py-24">
-        <div className="container-prose text-center">
-          <Reveal effect="scale">
-            <BookMarked className="mx-auto text-gold" size={28} />
-            <h2 className="mt-4 font-serif text-3xl md:text-4xl italic">Where our story begins.</h2>
-            <div className="gold-divider mx-auto mt-4" />
-          </Reveal>
-          <Reveal effect="soft" className="mt-12">
-            <div className="rounded-xl bg-primary-foreground/[0.04] border border-primary-foreground/10 backdrop-blur-sm py-8">
-              <CollegeMarquee />
-            </div>
-          </Reveal>
-          <Reveal>
-            <p className="mt-8 text-sm tracking-[0.2em] uppercase text-gold/90 font-display">
-              Real student acceptances · Real scholarship offers
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Google Reviews */}
-      <WhyChooseUs />
-
-      <ReviewsSection />
-
-      {/* Promise */}
-      <section className="promise-section relative overflow-hidden py-24 md:py-32">
-        <ScrollCanvasBackdrop className="promise-canvas" />
-        <div className="container-prose relative z-10">
-          <ScrollScrub strength={38}>
-            <Reveal effect="scale" className="promise-panel max-w-4xl mx-auto text-center">
-              <ShieldCheck className="promise-icon mx-auto text-gold" size={34} />
-              <span className="mt-5 block text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-                The Lodestar Promise
-              </span>
-              <h2 className="mt-4 font-serif text-4xl md:text-5xl italic">
-                Strategy, transparency, partnership.
+      <section
+        id="after-acceptance"
+        className="home-reviews home-section"
+        aria-labelledby="reviews-title"
+      >
+        <div className="home-container">
+          <div className="home-section-heading">
+            <div>
+              <p className="home-eyebrow">In their own words</p>
+              <h2 id="reviews-title">
+                Personal guidance.
+                <br />
+                <em>A shared experience.</em>
               </h2>
-              <div className="gold-divider mx-auto mt-6" />
-              <p className="mt-8 font-serif text-lg md:text-xl leading-relaxed text-muted-foreground">
-                Every Lodestar family receives the founder directly on every revision, a transparent
-                timeline of milestones, and a roadmap that adapts as your story grows. We measure
-                success in acceptance letters won for students and scholarship dollars secured, not
-                billable hours.
-              </p>
-              <div className="promise-proof-row" aria-label="Lodestar Promise pillars">
-                {["Founder revisions", "Transparent milestones", "Adaptive roadmap"].map((item) => (
-                  <div className="promise-proof" key={item}>
-                    {item}
-                  </div>
+            </div>
+            <div className="home-review-rating">
+              <span
+                className="home-stars"
+                aria-label={`${averageRating.toFixed(1)} out of 5 stars`}
+              >
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} size={17} aria-hidden="true" />
                 ))}
-              </div>
-            </Reveal>
-          </ScrollScrub>
+              </span>
+              <p>
+                <strong>{averageRating.toFixed(1)}</strong> from {totalReviewCount} Google reviews
+              </p>
+            </div>
+          </div>
+          <div className="home-review-grid">
+            {featuredReviews.map((review) => (
+              <figure key={review.name} className="home-review">
+                <span className="home-quote-mark" aria-hidden="true">
+                  “
+                </span>
+                <blockquote>{review.text}</blockquote>
+                <figcaption>
+                  <span className="home-review-name">{review.name}</span>
+                  <span className="home-stars" aria-label={`${review.rating} out of 5 stars`}>
+                    {Array.from({ length: review.rating }, (_, i) => (
+                      <Star key={i} size={11} aria-hidden="true" />
+                    ))}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <a
+            href="https://g.page/r/CfNGPVfR8HxDEAI/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="home-text-link home-review-link"
+          >
+            Read reviews on Google
+            <ExternalLink size={15} aria-hidden="true" />
+          </a>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="container-prose py-24">
-        <Reveal effect="scale" className="text-center max-w-2xl mx-auto">
-          <HelpCircle className="mx-auto text-gold" size={28} />
-          <span className="mt-4 block text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
-            Frequently Asked
-          </span>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl italic">
-            Answers before the first call.
-          </h2>
-          <div className="gold-divider mx-auto mt-6" />
-        </Reveal>
-        <div className="mt-14 max-w-3xl mx-auto divide-y divide-border border-y border-border">
-          {faqs.map((f, i) => (
-            <Reveal
-              key={f.q}
-              delay={((i % 4) + 1) as 1 | 2 | 3 | 4}
-              effect={i % 2 === 0 ? "left" : "right"}
-            >
-              <details className="group py-6">
-                <summary className="flex justify-between items-center cursor-pointer list-none">
-                  <span className="font-serif italic text-xl text-primary pr-6">{f.q}</span>
-                  <span className="text-gold text-2xl font-light transition-transform duration-300 group-open:rotate-45">
+      <section className="home-colleges home-section" aria-labelledby="colleges-title">
+        <div className="home-container">
+          <div className="home-colleges-heading">
+            <p className="home-eyebrow">Firsthand perspective</p>
+            <h2 id="colleges-title">
+              Where the founder’s
+              <br />
+              <em>journey has led.</em>
+            </h2>
+            <p>
+              Universities that offered Krish admission.
+              <br />
+              His experience informs the guidance; your path will be your own.
+            </p>
+          </div>
+          <CollegeMarquee />
+          <p className="home-college-note">
+            Logos represent founder acceptances, not Lodestar student outcomes or university
+            endorsements.
+          </p>
+        </div>
+      </section>
+
+      <section className="home-faq home-section" aria-labelledby="faq-title">
+        <div className="home-container home-faq-layout">
+          <div>
+            <p className="home-eyebrow">A few useful answers</p>
+            <h2 id="faq-title">
+              Before we <br />
+              <em>say hello.</em>
+            </h2>
+            <p>
+              Something else on your mind?
+              <br />
+              <Link to="/contact" className="home-text-link">
+                Get in touch
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </p>
+          </div>
+          <div className="home-faq-list">
+            {faqs.map((faq) => (
+              <details key={faq.q}>
+                <summary>
+                  <span>{faq.q}</span>
+                  <span className="home-faq-plus" aria-hidden="true">
                     +
                   </span>
                 </summary>
-                <p className="mt-4 text-primary font-serif leading-relaxed font-medium">{f.a}</p>
+                <p>{faq.a}</p>
               </details>
-            </Reveal>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="container-prose py-24 text-center">
-        <Reveal effect="scale">
-          <h2 className="font-serif text-4xl md:text-5xl italic">
-            Your future begins with a conversation.
+      <section className="home-closing" aria-labelledby="closing-title">
+        <div className="home-container home-closing-inner">
+          <p className="home-eyebrow">The next step is a small one</p>
+          <h2 id="closing-title">
+            Let’s talk about
+            <br />
+            <em>what comes next.</em>
           </h2>
-          <div className="gold-divider mx-auto mt-6" />
-          <p className="mt-6 font-serif italic text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Schedule a complimentary 30 minute consultation with our founder.
+          <p>
+            A free, 30-minute conversation with Krish.
+            <br />
+            Your questions, your goals, a place to start.
           </p>
           <a
-            href="https://cal.com/krish-s/lodestar?overlayCalendar=true"
+            href={consultationUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-8 inline-flex items-center gap-2 px-8 py-3.5 rounded-md bg-primary text-primary-foreground font-semibold shadow-elegant hover:-translate-y-0.5 transition-smooth font-display tracking-wider text-sm"
+            className="home-button home-button-gold"
           >
-            Begin Your Journey
-            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+            Book a free consultation
+            <ArrowRight size={17} aria-hidden="true" />
           </a>
-        </Reveal>
+          <span className="home-closing-note">No registration fee. No obligation.</span>
+          <div className="home-closing-star" aria-hidden="true">
+            ✦
+          </div>
+        </div>
       </section>
-    </>
+    </div>
   );
 }

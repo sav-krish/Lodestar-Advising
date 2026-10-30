@@ -1,32 +1,71 @@
 const reasons = [
   {
-    title: "No Registration Fee",
-    body: "There is no sign-up or registration fee to work with Lodestar. You only pay for the guidance you choose.",
+    number: "01",
+    title: "A familiar face, every session.",
+    body: "Work directly with founder Krish Sav. Pick up the conversation with someone who knows what you are working toward.",
   },
   {
-    title: "Flexible Scheduling",
-    body: "Sessions are scheduled around school, sports, and family life, Monday to Saturday, 9am to 8pm CST.",
+    number: "02",
+    title: "Feedback you can understand.",
+    body: "Talk through the reasoning behind an edit or a suggestion. Build the confidence to take the next step yourself.",
   },
   {
-    title: "Founder-Led Sessions",
-    body: "You work directly with Krish Sav, not a rotating bench of assistants, so strategy stays consistent from start to submit.",
+    number: "03",
+    title: "Room for your real life.",
+    body: "Virtual sessions around school and family commitments. Monday to Saturday, 9am to 8pm Central Time.",
   },
   {
-    title: "Free First Consultation",
-    body: "Start with a complimentary 30-minute consultation. If Lodestar is not the right fit, you owe nothing.",
+    number: "04",
+    title: "A thoughtful place to start.",
+    body: "Meet in a free, 30-minute consultation. Choose the guidance you need, with no registration fee.",
   },
 ];
 
 export function WhyChooseUs() {
   return (
-    <section className="bg-primary py-20 text-primary-foreground md:py-24">
-      <div className="container-prose">
-        <h2 className="font-serif italic text-3xl font-semibold md:text-4xl">Why families choose Lodestar</h2>
-        <div className="mt-12 grid gap-x-12 gap-y-9 sm:grid-cols-2">
-          {reasons.map((r) => (
-            <div key={r.title} className="border-t border-primary-foreground/25 pt-6">
-              <h3 className="font-serif italic text-xl font-semibold text-primary-foreground">{r.title}</h3>
-              <p className="mt-3 max-w-lg text-sm font-serif leading-relaxed text-primary-foreground">{r.body}</p>
+    <section
+      className="lodestar-values bg-primary py-20 text-primary-foreground md:py-28"
+      aria-labelledby="values-title"
+    >
+      <div className="container-prose grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
+        <div>
+          <p className="font-display text-xs uppercase tracking-[0.18em] text-gold">
+            The Lodestar difference
+          </p>
+          <h2
+            id="values-title"
+            className="mt-6 max-w-md font-serif text-4xl font-semibold leading-[1.06] md:text-5xl"
+          >
+            Good guidance starts
+            <br />
+            <em className="font-normal">with knowing you.</em>
+          </h2>
+          <p className="mt-6 max-w-sm text-base leading-relaxed text-primary-foreground/75">
+            Space to ask the small questions. A person to think things through with. And an
+            application that stays your own.
+          </p>
+          <div className="mt-10 h-px w-16 bg-gold" aria-hidden="true" />
+        </div>
+        <div className="divide-y divide-primary-foreground/20 border-t border-primary-foreground/20">
+          {reasons.map((reason) => (
+            <div
+              key={reason.title}
+              className="grid grid-cols-[2rem_1fr] gap-4 py-6 first:pt-6 last:pb-0"
+            >
+              <span
+                className="pt-1.5 font-display text-xs tracking-wider text-gold"
+                aria-hidden="true"
+              >
+                {reason.number}
+              </span>
+              <div>
+                <h3 className="font-serif text-2xl font-semibold text-primary-foreground">
+                  {reason.title}
+                </h3>
+                <p className="mt-2 max-w-lg text-sm leading-[1.8] text-primary-foreground/75">
+                  {reason.body}
+                </p>
+              </div>
             </div>
           ))}
         </div>

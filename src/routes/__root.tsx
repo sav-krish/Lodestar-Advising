@@ -9,7 +9,6 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 
-import { IntroSplash } from "@/components/IntroSplash";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { insights } from "@/data/insights";
@@ -70,7 +69,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
 const pageMetadata: Record<string, { title: string; description: string }> = {
   "/": {
-    title: "Lodestar Advising | Premium College Counseling & Admissions Prep",
+    title: "Lodestar Advising | Personal College Admissions & Essay Coaching",
     description:
       "Lodestar Advising is a founder-led college counseling practice helping ambitious students build stronger applications, essays, and scholarship strategies. Work directly with Krish Sav through flexible admissions support or focused essay coaching.",
   },
@@ -187,9 +186,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SeoManager />
-      <IntroSplash />
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <SiteHeader />
-      <main className="min-h-screen overflow-x-clip">
+      <main id="main-content" tabIndex={-1} className="min-h-screen">
         <Outlet />
       </main>
       <SiteFooter />
