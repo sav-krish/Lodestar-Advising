@@ -58,8 +58,8 @@
   --border: oklch(0.92 0 0);
   --input: oklch(0.92 0 0);
   --ring: oklch(0.72 0.13 78);
-  --gold: oklch(0.78 0.14 80); /* richer royal gold */
-  --gold-foreground: oklch(0.16 0.05 275);
+  --gold: #f6c700; /* Lodestar royal yellow */
+  --gold-foreground: #17133f;
   --cream: oklch(1 0 0);
 
   --gradient-hero: linear-gradient(

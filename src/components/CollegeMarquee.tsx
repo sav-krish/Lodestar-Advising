@@ -10,7 +10,6 @@ import harvard from "@/assets/logos/harvard.svg";
 import mit from "@/assets/logos/mit.png";
 import penn from "@/assets/logos/penn.png";
 import princeton from "@/assets/logos/princeton.png";
-import { Pause, Play } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import "@/styles/college-marquee.css";
 
@@ -36,13 +35,11 @@ export function CollegeMarquee() {
   const [isPaused, setIsPaused] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  const [isHovered, setIsHovered] = useState(false);
-  const [hasFocus, setHasFocus] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isDocumentVisible, setIsDocumentVisible] = useState(
     () => document.visibilityState === "visible",
   );
-  const isRunning = !isPaused && !isHovered && !hasFocus && isInView && isDocumentVisible;
+  const isRunning = !isPaused && isInView && isDocumentVisible;
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -107,13 +104,6 @@ export function CollegeMarquee() {
         role="region"
         aria-label="Founder acceptances at top universities"
         tabIndex={0}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onFocus={() => setHasFocus(true)}
-        onBlur={() => setHasFocus(false)}
-        onPointerDown={(event) => {
-          if (event.pointerType === "touch" || event.pointerType === "pen") setIsPaused(true);
-        }}
       >
         <div className="college-marquee-track">
           <ul ref={sequenceRef} className="college-marquee-sequence">
@@ -131,17 +121,6 @@ export function CollegeMarquee() {
             ))}
           </ul>
         </div>
-      </div>
-      <div className="college-marquee-controls">
-        <button
-          type="button"
-          className="college-marquee-toggle"
-          aria-controls={viewportId}
-          onClick={() => setIsPaused((paused) => !paused)}
-        >
-          {isPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
-          <span>{isPaused ? "Play logos" : "Pause logos"}</span>
-        </button>
       </div>
     </div>
   );

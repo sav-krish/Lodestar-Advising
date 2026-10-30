@@ -178,10 +178,6 @@ function Home() {
                 <em>you are right now.</em>
               </h2>
             </div>
-            <p>
-              One question or a stack of essay drafts. <br />
-              Make space for the work that matters next.
-            </p>
           </div>
           <div className="home-program-list">
             {programs.map((program) => (
@@ -223,12 +219,6 @@ function Home() {
               </article>
             ))}
           </div>
-          <p className="home-program-footnote">
-            Every session is with Krish. No registration fee.{" "}
-            <a href={consultationUrl} target="_blank" rel="noopener noreferrer">
-              Start with a free conversation <ArrowRight size={14} aria-hidden="true" />
-            </a>
-          </p>
         </div>
       </section>
 
@@ -395,7 +385,6 @@ function Home() {
             Book a free consultation
             <ArrowRight size={17} aria-hidden="true" />
           </a>
-          <span className="home-closing-note">No registration fee. No obligation.</span>
         </div>
       </section>
     </div>
