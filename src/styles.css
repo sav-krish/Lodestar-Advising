@@ -608,6 +608,12 @@
   .portal-admin-row strong {
     color: var(--primary);
   }
+  .portal-admin-student {
+    margin-top: 0.3rem;
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
   .portal-admin-row .portal-muted {
     margin-top: 0.25rem;
     font-size: 0.85rem;

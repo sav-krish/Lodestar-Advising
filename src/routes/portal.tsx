@@ -20,6 +20,7 @@ export const Route = createFileRoute("/portal")({
 type Profile = { id: string; email: string; full_name: string | null; role: "student" | "admin" };
 type Payment = {
   id: string;
+  student_id: string;
   program: string;
   amount_cents: number;
   status: string;
@@ -33,6 +34,13 @@ type Booking = {
   status: "scheduled" | "completed" | "cancelled";
   created_at: string;
 };
+type Material = {
+  id: string;
+  student_id: string;
+  file_name: string;
+  storage_path: string;
+  created_at: string;
+};
 
 const cutoff = new Date("2026-11-16T00:00:00-06:00");
 const hourPrice = () => (new Date() >= cutoff ? 6000 : 5000);
@@ -42,6 +50,7 @@ function Portal() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [materials, setMaterials] = useState<Material[]>([]);
   const [creditCount, setCreditCount] = useState(0);
   const [message, setMessage] = useState("");
   const [authMode, setAuthMode] = useState<"sign-in" | "sign-up">("sign-in");
@@ -68,15 +77,17 @@ function Portal() {
     if (!client || !session) return;
     const load = async () => {
       setLoading(true);
-      const [profileResult, paymentResult, creditResult, bookingResult] = await Promise.all([
-        client.from("profiles").select("*").eq("id", session.user.id).maybeSingle(),
-        client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
-        client
-          .from("booking_credits")
-          .select("credits_total, credits_used")
-          .eq("student_id", session.user.id),
-        client.from("bookings").select("*").order("created_at", { ascending: false }),
-      ]);
+      const [profileResult, paymentResult, creditResult, bookingResult, materialResult] =
+        await Promise.all([
+          client.from("profiles").select("*").eq("id", session.user.id).maybeSingle(),
+          client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
+          client
+            .from("booking_credits")
+            .select("credits_total, credits_used")
+            .eq("student_id", session.user.id),
+          client.from("bookings").select("*").order("created_at", { ascending: false }),
+          client.from("student_materials").select("*").order("created_at", { ascending: false }),
+        ]);
       if (profileResult.error) {
         setMessage(profileResult.error.message);
       } else if (!profileResult.data) {
@@ -93,6 +104,7 @@ function Portal() {
         ),
       );
       setBookings(bookingResult.data ?? []);
+      setMaterials(materialResult.data ?? []);
       const firstDataError = [paymentResult.error, creditResult.error, bookingResult.error].find(
         (error) => error,
       );
@@ -222,7 +234,12 @@ function Portal() {
         </button>
       </div>
       {profile.role === "admin" ? (
-        <AdminPanel payments={payments} bookings={bookings} onMessage={setMessage} />
+        <AdminPanel
+          payments={payments}
+          bookings={bookings}
+          materials={materials}
+          onMessage={setMessage}
+        />
       ) : (
         <div className="portal-grid">
           <section className="portal-card portal-progress-card">
@@ -413,15 +430,48 @@ function MaterialUpload({
 function AdminPanel({
   payments,
   bookings,
+  materials,
   onMessage,
 }: {
   payments: Payment[];
   bookings: Booking[];
+  materials: Material[];
   onMessage: (message: string) => void;
 }) {
   const [items, setItems] = useState(payments);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [bookingItems, setBookingItems] = useState(bookings);
+  const [studentNames, setStudentNames] = useState<Record<string, { name: string; email: string }>>(
+    {},
+  );
+
+  useEffect(() => {
+    if (!supabase) return;
+    const ids = [
+      ...new Set([
+        ...payments.map((payment) => payment.student_id),
+        ...bookings.map((booking) => booking.student_id),
+        ...materials.map((material) => material.student_id),
+      ]),
+    ];
+    if (ids.length === 0) return;
+    void supabase
+      .from("profiles")
+      .select("id, full_name, email")
+      .in("id", ids)
+      .then(({ data, error }) => {
+        if (error) onMessage(error.message);
+        else
+          setStudentNames(
+            Object.fromEntries(
+              (data ?? []).map((student) => [
+                student.id,
+                { name: student.full_name || "Student", email: student.email },
+              ]),
+            ),
+          );
+      });
+  }, [payments, bookings, materials, onMessage]);
 
   const review = async (payment: Payment, status: "approved" | "rejected") => {
     if (!supabase) return;
@@ -484,10 +534,45 @@ function AdminPanel({
           <article className="portal-admin-row" key={payment.id}>
             <div>
               <strong>{payment.program === "hour" ? "Lodestar Hour" : "Essay Package"}</strong>
+              <p className="portal-admin-student">
+                {studentNames[payment.student_id]?.name || "Student"} ·{" "}
+                {studentNames[payment.student_id]?.email || "Loading student details"}
+              </p>
               <p className="portal-muted">
                 ${(payment.amount_cents / 100).toFixed(0)} · {payment.status} ·{" "}
                 {new Date(payment.created_at).toLocaleDateString()}
               </p>
+            </div>
+            <div className="portal-admin-list">
+              <p className="portal-eyebrow">New material uploads</p>
+              {materials.length === 0 && <p className="portal-muted">No materials uploaded yet.</p>}
+              {materials.map((material) => (
+                <article className="portal-admin-row" key={material.id}>
+                  <div>
+                    <strong>{material.file_name}</strong>
+                    <p className="portal-admin-student">
+                      {studentNames[material.student_id]?.name || "Student"} ·{" "}
+                      {studentNames[material.student_id]?.email || "Loading student details"}
+                    </p>
+                    <p className="portal-muted">
+                      Uploaded {new Date(material.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                  <button
+                    className="portal-text-button"
+                    onClick={async () => {
+                      if (!supabase) return;
+                      const { data, error } = await supabase.storage
+                        .from("student-materials")
+                        .createSignedUrl(material.storage_path, 300);
+                      if (error) onMessage(error.message);
+                      else window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+                    }}
+                  >
+                    Open file
+                  </button>
+                </article>
+              ))}
             </div>
             <div className="portal-admin-actions">
               {payment.receipt_path && (
