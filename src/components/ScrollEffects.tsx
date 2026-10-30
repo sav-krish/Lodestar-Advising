@@ -70,8 +70,11 @@ export function ScrollCanvasBackdrop({ className }: { className?: string }) {
 
     let frame = 0;
     let alive = true;
+    let visible = true;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const draw = () => {
+      frame = 0;
       if (!alive) return;
 
       const rect = canvas.getBoundingClientRect();
@@ -91,7 +94,7 @@ export function ScrollCanvasBackdrop({ className }: { className?: string }) {
 
       const viewport = window.innerHeight || 1;
       const progress = clamp((viewport - rect.top) / (viewport + rect.height));
-      const now = performance.now() * 0.001;
+      const now = prefersReducedMotion ? 0 : performance.now() * 0.001;
 
       const glow = ctx.createRadialGradient(
         width * (0.28 + progress * 0.24),
@@ -106,6 +109,37 @@ export function ScrollCanvasBackdrop({ className }: { className?: string }) {
       glow.addColorStop(1, "rgba(255, 255, 255, 0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
+
+      const compassX = width * (0.76 - progress * 0.08);
+      const compassY = height * (0.32 + progress * 0.12);
+      const compassRadius = Math.min(width, height) * 0.24;
+
+      ctx.save();
+      ctx.translate(compassX, compassY);
+      ctx.rotate((progress - 0.5) * 0.18);
+      ctx.strokeStyle = "rgba(161, 125, 53, 0.12)";
+      ctx.lineWidth = 1;
+      for (let ring = 1; ring <= 3; ring += 1) {
+        ctx.beginPath();
+        ctx.arc(0, 0, compassRadius * (ring / 3), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(0, -compassRadius);
+      ctx.lineTo(0, compassRadius);
+      ctx.moveTo(-compassRadius, 0);
+      ctx.lineTo(compassRadius, 0);
+      ctx.strokeStyle = "rgba(161, 125, 53, 0.08)";
+      ctx.stroke();
+      ctx.fillStyle = "rgba(161, 125, 53, 0.34)";
+      ctx.beginPath();
+      ctx.moveTo(0, -compassRadius * 0.58);
+      ctx.lineTo(compassRadius * 0.055, 0);
+      ctx.lineTo(0, compassRadius * 0.58);
+      ctx.lineTo(-compassRadius * 0.055, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
 
       ctx.lineCap = "round";
       for (let i = 0; i < 4; i += 1) {
@@ -138,14 +172,24 @@ export function ScrollCanvasBackdrop({ className }: { className?: string }) {
         ctx.fill();
       }
 
-      frame = window.requestAnimationFrame(draw);
+      if (!prefersReducedMotion && visible) {
+        frame = window.requestAnimationFrame(draw);
+      }
     };
 
-    frame = window.requestAnimationFrame(draw);
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      if (visible && !prefersReducedMotion && !frame) {
+        frame = window.requestAnimationFrame(draw);
+      }
+    });
+    observer.observe(canvas);
+    draw();
 
     return () => {
       alive = false;
       if (frame) window.cancelAnimationFrame(frame);
+      observer.disconnect();
     };
   }, []);
 
