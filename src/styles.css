@@ -422,9 +422,177 @@
     position: relative;
     width: min(25rem, 88vw);
     aspect-ratio: 1.48;
+    opacity: 0;
     transform: translateY(3rem) rotateX(10deg) scale(0.92);
     transform-style: preserve-3d;
-    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      opacity 0.45s ease,
+      transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .acceptance-confetti {
+    position: absolute;
+    inset: 8% 2%;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .acceptance-confetti span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.45rem;
+    height: 0.8rem;
+    border-radius: 0.12rem;
+    opacity: 0;
+    background: var(--confetti-color, var(--gold));
+    transform: translate(-50%, -50%) rotate(var(--confetti-rotate, 0deg)) scale(0.2);
+  }
+  .acceptance-confetti span:nth-child(3n) {
+    --confetti-color: #9c5de8;
+  }
+  .acceptance-confetti span:nth-child(3n + 1) {
+    --confetti-color: #ef6c93;
+  }
+  .acceptance-confetti span:nth-child(3n + 2) {
+    --confetti-color: #43b9a2;
+  }
+  .acceptance-confetti span:nth-child(1) {
+    --confetti-x: -12rem;
+    --confetti-y: -9rem;
+    --confetti-rotate: 24deg;
+  }
+  .acceptance-confetti span:nth-child(2) {
+    --confetti-x: -9rem;
+    --confetti-y: -12rem;
+    --confetti-rotate: 76deg;
+  }
+  .acceptance-confetti span:nth-child(3) {
+    --confetti-x: -5rem;
+    --confetti-y: -10rem;
+    --confetti-rotate: 132deg;
+  }
+  .acceptance-confetti span:nth-child(4) {
+    --confetti-x: -2rem;
+    --confetti-y: -13rem;
+    --confetti-rotate: 8deg;
+  }
+  .acceptance-confetti span:nth-child(5) {
+    --confetti-x: 2rem;
+    --confetti-y: -11rem;
+    --confetti-rotate: 98deg;
+  }
+  .acceptance-confetti span:nth-child(6) {
+    --confetti-x: 6rem;
+    --confetti-y: -13rem;
+    --confetti-rotate: 42deg;
+  }
+  .acceptance-confetti span:nth-child(7) {
+    --confetti-x: 10rem;
+    --confetti-y: -9rem;
+    --confetti-rotate: 154deg;
+  }
+  .acceptance-confetti span:nth-child(8) {
+    --confetti-x: 13rem;
+    --confetti-y: -6rem;
+    --confetti-rotate: 62deg;
+  }
+  .acceptance-confetti span:nth-child(9) {
+    --confetti-x: -14rem;
+    --confetti-y: -4rem;
+    --confetti-rotate: 112deg;
+  }
+  .acceptance-confetti span:nth-child(10) {
+    --confetti-x: 14rem;
+    --confetti-y: -2rem;
+    --confetti-rotate: 12deg;
+  }
+  .acceptance-confetti span:nth-child(11) {
+    --confetti-x: -12rem;
+    --confetti-y: 2rem;
+    --confetti-rotate: 82deg;
+  }
+  .acceptance-confetti span:nth-child(12) {
+    --confetti-x: 13rem;
+    --confetti-y: 3rem;
+    --confetti-rotate: 142deg;
+  }
+  .acceptance-confetti span:nth-child(13) {
+    --confetti-x: -9rem;
+    --confetti-y: 7rem;
+    --confetti-rotate: 34deg;
+  }
+  .acceptance-confetti span:nth-child(14) {
+    --confetti-x: 9rem;
+    --confetti-y: 8rem;
+    --confetti-rotate: 108deg;
+  }
+  .acceptance-confetti span:nth-child(15) {
+    --confetti-x: -5rem;
+    --confetti-y: 10rem;
+    --confetti-rotate: 174deg;
+  }
+  .acceptance-confetti span:nth-child(16) {
+    --confetti-x: 4rem;
+    --confetti-y: 11rem;
+    --confetti-rotate: 58deg;
+  }
+  .acceptance-confetti span:nth-child(17) {
+    --confetti-x: -2rem;
+    --confetti-y: 13rem;
+    --confetti-rotate: 126deg;
+  }
+  .acceptance-confetti span:nth-child(18) {
+    --confetti-x: 1rem;
+    --confetti-y: -14rem;
+    --confetti-rotate: 18deg;
+  }
+  @keyframes acceptance-confetti-burst {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(var(--confetti-rotate)) scale(0.2);
+    }
+    18% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y)))
+        rotate(calc(var(--confetti-rotate) + 360deg)) scale(1);
+    }
+  }
+  .acceptance-orbit {
+    position: absolute;
+    border: 1px solid color-mix(in oklab, var(--gold) 48%, transparent);
+    border-radius: 999px;
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.8);
+  }
+  .acceptance-orbit-one {
+    width: min(29rem, 95vw);
+    height: 13rem;
+  }
+  .acceptance-orbit-two {
+    width: min(24rem, 82vw);
+    height: 18rem;
+    border-color: color-mix(in oklab, #9c5de8 42%, transparent);
+    transform: rotate(38deg) scale(0.8);
+  }
+  @keyframes acceptance-jiggle-one {
+    0%,
+    100% {
+      transform: rotate(-18deg) translateY(0);
+    }
+    50% {
+      transform: rotate(-15deg) translateY(-0.45rem);
+    }
+  }
+  @keyframes acceptance-jiggle-two {
+    0%,
+    100% {
+      transform: rotate(38deg) translateX(0);
+    }
+    50% {
+      transform: rotate(42deg) translateX(0.4rem);
+    }
   }
   .acceptance-letter {
     position: absolute;
@@ -545,6 +713,7 @@
     transform: scale(1);
   }
   .acceptance-moment.is-visible .acceptance-envelope {
+    opacity: 1;
     transform: translateY(0) rotateX(0) scale(1);
   }
   .acceptance-moment.is-visible .acceptance-letter {
@@ -552,6 +721,18 @@
   }
   .acceptance-moment.is-visible .acceptance-envelope-flap {
     transform: rotateX(180deg);
+  }
+  .acceptance-moment.is-visible .acceptance-confetti span {
+    animation: acceptance-confetti-burst 1.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .acceptance-moment.is-visible .acceptance-orbit {
+    opacity: 1;
+  }
+  .acceptance-moment.is-visible .acceptance-orbit-one {
+    animation: acceptance-jiggle-one 3.2s ease-in-out 1.2s infinite;
+  }
+  .acceptance-moment.is-visible .acceptance-orbit-two {
+    animation: acceptance-jiggle-two 3.8s ease-in-out 1.35s infinite;
   }
   @media (min-width: 900px) {
     .acceptance-moment-grid {
@@ -562,10 +743,14 @@
     .acceptance-stage-glow,
     .acceptance-envelope,
     .acceptance-letter,
-    .acceptance-envelope-flap {
+    .acceptance-envelope-flap,
+    .acceptance-confetti span,
+    .acceptance-orbit {
       transition: none;
+      animation: none !important;
     }
     .acceptance-envelope {
+      opacity: 1;
       transform: none;
     }
     .acceptance-stage-glow {
@@ -577,6 +762,14 @@
     }
     .acceptance-envelope-flap {
       transform: rotateX(180deg);
+    }
+    .acceptance-confetti span {
+      opacity: 1;
+      transform: translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y)))
+        rotate(var(--confetti-rotate));
+    }
+    .acceptance-orbit {
+      opacity: 1;
     }
   }
   @media (min-width: 768px) {

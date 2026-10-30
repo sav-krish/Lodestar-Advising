@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, Check, Sparkles } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 
 export function AcceptanceLetter() {
   const ref = useRef<HTMLElement>(null);
@@ -16,7 +16,7 @@ export function AcceptanceLetter() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
 
     observer.observe(element);
@@ -46,14 +46,6 @@ export function AcceptanceLetter() {
               Before the campus tour, the move-in day, or the first lecture, there is a quieter
               moment. A student opens an envelope and sees a future they helped build.
             </p>
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              This is an illustrative Lodestar moment, not a promise of admission. Our role is to
-              make each student&apos;s preparation thoughtful, rigorous, and unmistakably their own.
-            </p>
-            <div className="mt-8 inline-flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-primary font-display">
-              <ArrowDown size={16} className="text-gold" aria-hidden="true" />
-              Scroll to open
-            </div>
           </div>
 
           <div
@@ -61,6 +53,13 @@ export function AcceptanceLetter() {
             aria-label="Illustration of opening an acceptance letter"
           >
             <div className="acceptance-stage-glow" aria-hidden="true" />
+            <div className="acceptance-confetti" aria-hidden="true">
+              {Array.from({ length: 18 }, (_, index) => (
+                <span key={index} />
+              ))}
+            </div>
+            <div className="acceptance-orbit acceptance-orbit-one" aria-hidden="true" />
+            <div className="acceptance-orbit acceptance-orbit-two" aria-hidden="true" />
             <div className="acceptance-envelope">
               <div className="acceptance-letter">
                 <div className="acceptance-letter-header">
