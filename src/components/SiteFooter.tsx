@@ -73,6 +73,9 @@ export function SiteFooter() {
             <li>
               <Link to="/privacy">Privacy</Link>
             </li>
+            <li>
+              <Link to="/insights">Insights</Link>
+            </li>
           </ul>
         </div>
         <div>

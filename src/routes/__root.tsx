@@ -12,6 +12,7 @@ import {
 import { IntroSplash } from "@/components/IntroSplash";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { insights } from "@/data/insights";
 
 function NotFoundComponent() {
   return (
@@ -108,13 +109,25 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     description:
       "Learn how Lodestar Advising uses and protects the information shared through its college counseling inquiry form.",
   },
+  "/insights": {
+    title: "Admissions Insights | Lodestar Advising",
+    description:
+      "Lodestar Advising insights on the 2026 to 2027 admissions cycle, application strategy, AI and authenticity, and selective college preparation.",
+  },
 };
 
 function SeoManager() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const metadata = pageMetadata[pathname] ?? pageMetadata["/"];
+    const insightSlug = pathname.startsWith("/insights/") ? pathname.split("/")[2] : undefined;
+    const insight = insights.find((item) => item.slug === insightSlug);
+    const metadata = insight
+      ? {
+          title: `${insight.title} | Lodestar Advising`,
+          description: insight.dek,
+        }
+      : (pageMetadata[pathname] ?? pageMetadata["/"]);
     const canonicalPath = pathname === "/" ? "/" : pathname;
     document.title = metadata.title;
 
