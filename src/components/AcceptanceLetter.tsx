@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export function AcceptanceLetter() {
   const ref = useRef<HTMLElement>(null);
@@ -80,10 +80,6 @@ export function AcceptanceLetter() {
                 <p className="acceptance-letter-kicker">A new chapter begins</p>
                 <h3>Congratulations, future scholar.</h3>
                 <p>Your curiosity, character, and commitment have somewhere new to grow.</p>
-                <div className="acceptance-letter-signature">
-                  <Check size={15} aria-hidden="true" />
-                  <span>Prepared with intention</span>
-                </div>
               </div>
               <div className="acceptance-envelope-pocket" aria-hidden="true" />
               <div className="acceptance-envelope-flap" aria-hidden="true" />
