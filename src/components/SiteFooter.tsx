@@ -9,10 +9,13 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <img src={logo} alt="Lodestar logo" className="h-10 w-auto object-contain" />
-            <span className="font-display text-sm tracking-[0.22em] uppercase">Lodestar</span>
+            <span className="font-display text-sm tracking-[0.16em] uppercase">
+              Lodestar Advising
+            </span>
           </div>
           <p className="mt-4 text-sm text-primary-foreground max-w-sm font-serif italic leading-relaxed">
-            Lodestar Advising: premium Ivy League admissions prep and founder-led college counseling for ambitious students aiming for the world's most selective universities.
+            Lodestar Advising: premium Ivy League admissions prep and founder-led college counseling
+            for ambitious students aiming for the world's most selective universities.
           </p>
           <div className="mt-4 flex items-center gap-4">
             <a
@@ -43,20 +46,39 @@ export function SiteFooter() {
               <Facebook size={20} />
             </a>
           </div>
-          <p className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-gold font-display">Established · MMXXVI</p>
+          <p className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-gold font-display">
+            Established · MMXXVI
+          </p>
         </div>
         <div>
-          <h4 className="font-display text-xs uppercase tracking-[0.2em] mb-4 text-gold">Explore</h4>
+          <h4 className="font-display text-xs uppercase tracking-[0.2em] mb-4 text-gold">
+            Explore
+          </h4>
           <ul className="space-y-2 text-sm text-primary-foreground">
-            <li><Link to="/services">Programs</Link></li>
-            <li><Link to="/results">Results</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/faq">FAQ</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
+            <li>
+              <Link to="/services">Programs</Link>
+            </li>
+            <li>
+              <Link to="/results">Results</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/faq">FAQ</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
+            <li>
+              <Link to="/privacy">Privacy</Link>
+            </li>
           </ul>
         </div>
         <div>
-          <h4 className="font-display text-xs uppercase tracking-[0.2em] mb-4 text-gold">Contact</h4>
+          <h4 className="font-display text-xs uppercase tracking-[0.2em] mb-4 text-gold">
+            Contact
+          </h4>
           <ul className="space-y-2 text-sm text-primary-foreground">
             <li>advising.lodestar@gmail.com</li>
             <li>+1 (608) 421-3736</li>

@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
 import {
   Link,
   Outlet,
   createRootRouteWithContext,
+  useLocation,
   useRouter,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
@@ -65,6 +67,101 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+const pageMetadata: Record<string, { title: string; description: string }> = {
+  "/": {
+    title: "Lodestar Advising | Premium College Counseling & Admissions Prep",
+    description:
+      "Lodestar Advising is a founder-led college counseling practice helping ambitious students build stronger applications, essays, and scholarship strategies. Work directly with Krish Sav through flexible admissions support or focused essay coaching.",
+  },
+  "/about": {
+    title: "About Lodestar Advising | Founder-Led College Counseling",
+    description:
+      "Meet Krish Sav, founder of Lodestar Advising. Learn how firsthand admissions experience became a clear, rigorous college counseling playbook for ambitious students.",
+  },
+  "/services": {
+    title: "College Counseling Programs | Lodestar Advising",
+    description:
+      "Explore Lodestar Advising programs: a flexible Lodestar Hour for admissions questions and a ten-class essay package for focused, founder-led college essay coaching.",
+  },
+  "/results": {
+    title: "Student Results | Lodestar Advising College Counseling",
+    description:
+      "See the Lodestar Advising results story, including 12+ elite college acceptances, $600K+ in scholarships won for students, and 20+ clients helped.",
+  },
+  "/events": {
+    title: "College Admissions Events | Lodestar Advising",
+    description:
+      "Find upcoming Lodestar Advising college admissions webinars, information sessions, and opportunities to learn the playbook behind stronger applications.",
+  },
+  "/faq": {
+    title: "College Counseling FAQ | Lodestar Advising",
+    description:
+      "Get answers about Lodestar Advising college counseling, essay coaching, timelines, pricing, students served, and how to begin a consultation.",
+  },
+  "/contact": {
+    title: "Contact Lodestar Advising | Book a Consultation",
+    description:
+      "Contact Lodestar Advising to book a complimentary 30-minute consultation with founder Krish Sav about college counseling, admissions strategy, or essay coaching.",
+  },
+  "/privacy": {
+    title: "Privacy Policy | Lodestar Advising",
+    description:
+      "Learn how Lodestar Advising uses and protects the information shared through its college counseling inquiry form.",
+  },
+};
+
+function SeoManager() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const metadata = pageMetadata[pathname] ?? pageMetadata["/"];
+    const canonicalPath = pathname === "/" ? "/" : pathname;
+    document.title = metadata.title;
+
+    const setMeta = (
+      selector: string,
+      attribute: "name" | "property",
+      value: string,
+      content: string,
+    ) => {
+      let element = document.head.querySelector<HTMLMetaElement>(selector);
+      if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute(attribute, value);
+        document.head.appendChild(element);
+      }
+      element.content = content;
+    };
+
+    setMeta('meta[name="description"]', "name", "description", metadata.description);
+    setMeta('meta[property="og:title"]', "property", "og:title", metadata.title);
+    setMeta('meta[property="og:description"]', "property", "og:description", metadata.description);
+    setMeta(
+      'meta[property="og:url"]',
+      "property",
+      "og:url",
+      `https://lodestaradvising.com${canonicalPath}`,
+    );
+    setMeta('meta[name="twitter:title"]', "name", "twitter:title", metadata.title);
+    setMeta(
+      'meta[name="twitter:description"]',
+      "name",
+      "twitter:description",
+      metadata.description,
+    );
+
+    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = `https://lodestaradvising.com${canonicalPath}`;
+  }, [pathname]);
+
+  return null;
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -76,6 +173,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SeoManager />
       <IntroSplash />
       <SiteHeader />
       <main className="min-h-screen overflow-x-clip">

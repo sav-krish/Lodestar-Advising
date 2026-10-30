@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 
 declare global {
@@ -18,6 +18,26 @@ export function ContactForm() {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const fields = {
+      lead_source: "Lodestar website",
+      page_url: window.location.href,
+      submitted_at: new Date().toISOString(),
+      utm_source: params.get("utm_source") ?? "",
+      utm_medium: params.get("utm_medium") ?? "",
+      utm_campaign: params.get("utm_campaign") ?? "",
+    };
+
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = form.elements.namedItem(name);
+      if (input instanceof HTMLInputElement) input.value = value;
+    });
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -30,6 +50,10 @@ export function ContactForm() {
     setStatus("idle");
 
     try {
+      const submittedAt = formRef.current.elements.namedItem("submitted_at");
+      if (submittedAt instanceof HTMLInputElement) {
+        submittedAt.value = new Date().toISOString();
+      }
       await window.emailjs.sendForm("service_d4ussw9", "template_6pci7ez", formRef.current);
       setStatus("success");
       if (formRef.current) {
@@ -51,6 +75,12 @@ export function ContactForm() {
       className="p-8 md:p-10 rounded-xl bg-card border border-border shadow-elegant space-y-5 hover:shadow-soft transition-smooth"
     >
       <h2 className="text-2xl italic">Reach out to us with any questions</h2>
+      <input type="hidden" name="lead_source" />
+      <input type="hidden" name="page_url" />
+      <input type="hidden" name="submitted_at" />
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label htmlFor="from_name" className="block text-sm font-medium mb-2">
@@ -61,6 +91,7 @@ export function ContactForm() {
             name="from_name"
             type="text"
             placeholder="Student Name"
+            autoComplete="name"
             required
             className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
           />
@@ -74,6 +105,7 @@ export function ContactForm() {
             name="graduation_year"
             type="text"
             placeholder="Graduation Year"
+            inputMode="numeric"
             required
             className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
           />
@@ -87,6 +119,7 @@ export function ContactForm() {
             name="from_email"
             type="email"
             placeholder="Email"
+            autoComplete="email"
             required
             className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
           />
@@ -100,6 +133,7 @@ export function ContactForm() {
             name="phone"
             type="tel"
             placeholder="Phone"
+            autoComplete="tel"
             required
             className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
           />
@@ -120,7 +154,10 @@ export function ContactForm() {
 
       {/* Status Messages */}
       {status === "success" && (
-        <div className="flex items-center gap-2 p-4 rounded-md bg-green-50 border border-green-200">
+        <div
+          role="status"
+          className="flex items-center gap-2 p-4 rounded-md bg-green-50 border border-green-200"
+        >
           <CheckCircle2 size={18} className="text-green-600" />
           <span className="text-sm text-green-700 font-medium">
             Your consultation request has been sent successfully!
@@ -128,7 +165,10 @@ export function ContactForm() {
         </div>
       )}
       {status === "error" && (
-        <div className="flex items-center gap-2 p-4 rounded-md bg-red-50 border border-red-200">
+        <div
+          role="alert"
+          className="flex items-center gap-2 p-4 rounded-md bg-red-50 border border-red-200"
+        >
           <AlertCircle size={18} className="text-red-600" />
           <span className="text-sm text-red-700 font-medium">
             Failed to send message. Please try again.

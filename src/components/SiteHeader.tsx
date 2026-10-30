@@ -17,9 +17,13 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
       <div className="container-prose flex items-center justify-between h-20">
         <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="Lodestar logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-smooth" />
-          <span className="font-display text-sm tracking-[0.22em] uppercase text-foreground">
-            Lodestar
+          <img
+            src={logo}
+            alt="Lodestar logo"
+            className="h-9 w-auto object-contain group-hover:scale-105 transition-smooth"
+          />
+          <span className="font-display text-sm tracking-[0.16em] uppercase text-foreground">
+            Lodestar Advising
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
@@ -41,11 +45,7 @@ export function SiteHeader() {
             Book Consultation
           </Link>
         </nav>
-        <button
-          className="md:hidden p-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
+        <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
