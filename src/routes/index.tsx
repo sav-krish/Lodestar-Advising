@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowRight, Check, ExternalLink, Star } from "lucide-react";
-import founderImg from "@/assets/krish-sav-founder.jpg";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { CollegeMarquee } from "@/components/CollegeMarquee";
@@ -162,49 +161,6 @@ function Home() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="home-founder home-section" aria-labelledby="founder-title">
-        <div className="home-container home-founder-grid">
-          <figure className="home-founder-portrait">
-            <img
-              src={founderImg}
-              alt="Krish Sav, founder of Lodestar Advising"
-              width={1520}
-              height={2048}
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>
-              <span>KRISH SAV</span>
-              <span>Founder & your advisor</span>
-            </figcaption>
-          </figure>
-          <Reveal className="home-founder-copy">
-            <h2 id="founder-title">
-              Meet your advisor.
-              <br />
-              <em>And your sounding board.</em>
-            </h2>
-            <p className="home-lead">
-              College applications ask you to explain who you are. It helps to have someone who
-              takes the time to listen.
-            </p>
-            <p>
-              Krish navigated his own college applications without a private counselor. He founded
-              Lodestar to share that firsthand perspective with students and families who want a
-              clearer way forward.
-            </p>
-            <p>
-              From a first essay idea to an admissions question, you work with him directly. Talk it
-              through, understand the feedback, and make decisions that feel like your own.
-            </p>
-            <Link to="/about" className="home-text-link">
-              Get to know Krish
-              <ArrowRight size={17} aria-hidden="true" />
-            </Link>
-          </Reveal>
         </div>
       </section>
 
