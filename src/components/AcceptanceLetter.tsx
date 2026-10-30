@@ -9,18 +9,28 @@ export function AcceptanceLetter() {
     const element = ref.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
+    let frame = 0;
+    const revealWhenReady = () => {
+      frame = 0;
+      const { top, bottom } = element.getBoundingClientRect();
+      if (top < window.innerHeight * 0.86 && bottom > window.innerHeight * 0.14) {
+        setIsVisible(true);
+        window.removeEventListener("scroll", requestReveal);
+        window.removeEventListener("resize", requestReveal);
+      }
+    };
+    const requestReveal = () => {
+      if (!frame) frame = window.requestAnimationFrame(revealWhenReady);
+    };
 
-    observer.observe(element);
-    return () => observer.disconnect();
+    requestReveal();
+    window.addEventListener("scroll", requestReveal, { passive: true });
+    window.addEventListener("resize", requestReveal);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestReveal);
+      window.removeEventListener("resize", requestReveal);
+    };
   }, []);
 
   return (
