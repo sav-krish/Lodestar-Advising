@@ -67,7 +67,7 @@ function Portal() {
     if (!client || !session) return;
     const load = async () => {
       const [profileResult, paymentResult, creditResult, bookingResult] = await Promise.all([
-        client.from("profiles").select("*").eq("id", session.user.id).single(),
+        client.from("profiles").select("*").eq("id", session.user.id).maybeSingle(),
         client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
         client
           .from("booking_credits")
@@ -75,7 +75,13 @@ function Portal() {
           .eq("student_id", session.user.id),
         client.from("bookings").select("*").order("created_at", { ascending: false }),
       ]);
-      if (profileResult.error) setMessage(profileResult.error.message);
+      if (profileResult.error) {
+        setMessage(profileResult.error.message);
+      } else if (!profileResult.data) {
+        setMessage(
+          "Your account is authenticated, but its Lodestar profile is missing. Run the portal profile repair SQL in Supabase, then sign in again.",
+        );
+      }
       setProfile(profileResult.data);
       setPayments(paymentResult.data ?? []);
       setCreditCount(
