@@ -1,5 +1,8 @@
 export const clientsHelped = 20;
 
+export const getHourPriceCents = (date = new Date()) =>
+  date >= new Date(2026, 10, 10) ? 6000 : 5000;
+
 export const programs = [
   {
     id: "hour",

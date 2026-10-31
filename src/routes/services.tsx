@@ -11,7 +11,7 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Choose The Lodestar Hour for flexible admissions support or The Lodestar Essay Package: 10 premium, 30-minute essay classes for $550. 20+ clients helped.",
+          "Choose The Lodestar Hour for flexible admissions support or The Lodestar Essay Package: 10 premium, 30-minute essay classes. 20+ clients helped.",
       },
       { property: "og:title", content: "Lodestar Advising | The Lodestar Hour & Essay Package" },
       {
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/services")({
             item: {
               "@type": "Service",
               name: p.name,
-              description: `${p.summary} ${p.points.join(". ")}. ${p.priceSummary}`,
+              description: `${p.summary} ${p.points.join(". ")}.`,
               provider: { "@type": "Organization", name: "Lodestar Advising" },
             },
           })),
@@ -85,7 +85,7 @@ function Services() {
                   {p.sessionCount === 1 ? "1 × 60-minute session" : "10 × 30-minute classes"}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {p.id === "essay-package"
+                  {p.discountedHourlyRate
                     ? "5 hours of essay coaching in total"
                     : "Choose the topic. We’ll work through it together."}
                 </p>
@@ -100,10 +100,12 @@ function Services() {
               </ul>
               <div className="mt-8 min-h-20">
                 <p className="font-medium">
-                  {p.id === "essay-package" ? "Ten essay classes" : "One Lodestar Hour"}
+                  {p.discountedHourlyRate ? "Package savings" : "Pay for the hour you need"}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {p.priceSummary}
+                  {p.discountedHourlyRate
+                    ? "A complete essay-only pathway from first idea to final draft."
+                    : "Bring the questions that matter to you, and work through them together."}
                 </p>
               </div>
               <Button asChild size="lg" className="mt-6 h-12 w-full font-display text-xs uppercase">

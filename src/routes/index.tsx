@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "How does the Essay Package work?",
-    a: "The Lodestar Essay Package includes ten 30-minute classes with Krish, focused only on essays. Work on brainstorming, structure, writing, and revision for your Common App and supplemental essays. The ten-class package costs $550.",
+    a: "The Lodestar Essay Package includes ten 30-minute classes with Krish, focused only on essays. Work on brainstorming, structure, writing, and revision for your Common App and supplemental essays. Contact us to talk through the package.",
   },
   {
     q: "Who will I work with?",
@@ -116,7 +116,7 @@ export const Route = createFileRoute("/")({
               itemOffered: {
                 "@type": "Service",
                 name: p.name,
-                description: `${p.summary} ${p.points.join(". ")}. ${p.priceSummary}`,
+                description: `${p.summary} ${p.points.join(". ")}.`,
               },
             })),
           },
@@ -202,11 +202,10 @@ function Home() {
                     {program.points.map((point) => (
                       <li key={point}>
                         <Check size={16} aria-hidden="true" />
-                        <span>{point}</span>
+                        <span className="font-serif">{point}</span>
                       </li>
                     ))}
                   </ul>
-                  <p className="home-program-note">{program.priceSummary}</p>
                   <Link to="/services" className="home-text-link">
                     Explore {program.id === "hour" ? "the Hour" : "the Essay Package"}
                     <ArrowRight size={17} aria-hidden="true" />
@@ -230,10 +229,6 @@ function Home() {
                 <em>Build from there.</em>
               </h2>
             </div>
-            <p>
-              You don’t need to have it all figured out. <br />
-              That’s a good place to begin.
-            </p>
           </div>
           <div className="home-process-grid">
             {process.map((step) => (
@@ -318,11 +313,6 @@ function Home() {
               <br />
               <em>journey has led.</em>
             </h2>
-            <p>
-              Universities that offered Krish admission.
-              <br />
-              His experience informs the guidance; your path will be your own.
-            </p>
           </div>
           <CollegeMarquee />
         </div>

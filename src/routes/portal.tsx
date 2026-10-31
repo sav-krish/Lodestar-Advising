@@ -10,6 +10,7 @@ import {
 } from "react";
 import { CalendarDays, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { calcomBookingUrl, supabase } from "@/lib/supabase";
+import { getHourPriceCents } from "@/data/programs";
 
 export const Route = createFileRoute("/portal")({
   head: () => ({
@@ -51,9 +52,6 @@ type Material = {
   created_at: string;
 };
 
-const cutoff = new Date("2026-11-16T00:00:00-06:00");
-const hourPrice = () => (new Date() >= cutoff ? 6000 : 5000);
-
 function Portal() {
   const [session, setSession] = useState<PortalSession | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -69,14 +67,13 @@ function Portal() {
   const userId = session?.user.id ?? null;
 
   const configured = Boolean(supabase);
-  const hasApprovedPayment = payments.some((payment) => payment.status === "approved");
-  const currentPrice = useMemo(() => hourPrice(), []);
   const showMessage = useCallback(
     (next: string) => {
       if (currentUserRef.current === userId) setMessage(next);
     },
     [userId],
   );
+  const currentPrice = useMemo(() => getHourPriceCents(), []);
 
   useEffect(() => {
     if (!supabase) return;
