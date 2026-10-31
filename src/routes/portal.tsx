@@ -237,7 +237,7 @@ function Portal() {
           <p className="portal-muted portal-heading-note">
             {profile.role === "admin"
               ? "Review payments, manage credits, and keep student sessions up to date."
-              : "Payment approval unlocks your first booking."}
+              : "Use your portal to schedule, submit payment confirmations, and share materials."}
           </p>
         </div>
         <button
@@ -258,50 +258,43 @@ function Portal() {
         <div className="portal-grid">
           <section className="portal-card portal-card-wide">
             <p className="portal-eyebrow">Your next step</p>
-            <h2>
-              {creditCount > 0
-                ? "Your Lodestar Hour is ready to schedule."
-                : "Start by confirming your payment."}
-            </h2>
+            <h2>Schedule your Lodestar Hour</h2>
             <p className="portal-muted">
-              Zelle {currentPrice === 5000 ? "$50" : "$60"} to <strong>608-421-3736</strong>. The
-              first payment requires a receipt upload. Future Lodestar Hours require prepayment, but
-              no new receipt upload.
+              Choose a time that works for you. Submit your Zelle confirmation below so the owner
+              can review your payment.
             </p>
-            {creditCount > 0 ? (
-              <>
-                <div className="portal-calendar">
-                  <iframe
-                    title="Schedule your Lodestar Hour"
-                    src={calcomBookingUrl}
-                    loading="lazy"
-                  />
-                </div>
-                <a
-                  className="portal-button portal-button-secondary"
-                  href={calcomBookingUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <CalendarDays size={17} /> Open scheduler in a new tab
-                </a>
-              </>
-            ) : (
-              <PaymentForm
-                onSubmit={submitPayment}
-                busy={busy}
-                hasPriorPayment={hasApprovedPayment}
-                price={currentPrice}
-              />
-            )}
+            <div className="portal-calendar">
+              <iframe title="Schedule your Lodestar Hour" src={calcomBookingUrl} loading="lazy" />
+            </div>
+            <a
+              className="portal-button portal-button-secondary"
+              href={calcomBookingUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <CalendarDays size={17} /> Open scheduler in a new tab
+            </a>
           </section>
           <section className="portal-card">
-            <p className="portal-eyebrow">Booking access</p>
-            <h2>{creditCount > 0 ? "You can book now." : "Payment review first."}</h2>
+            <p className="portal-eyebrow">Payment confirmation</p>
+            <h2>Send your payment details</h2>
             <p className="portal-muted">
-              {creditCount > 0
-                ? "Your approved payment has unlocked the scheduling calendar."
-                : "We will give you booking access after your payment is approved."}
+              Zelle {currentPrice === 5000 ? "$50" : "$60"} to <strong>608-421-3736</strong>. Your
+              first payment needs a receipt; later confirmations do not.
+            </p>
+            <PaymentForm
+              onSubmit={submitPayment}
+              busy={busy}
+              hasPriorPayment={payments.length > 0}
+              price={currentPrice}
+            />
+          </section>
+          <section className="portal-card">
+            <p className="portal-eyebrow">Portal access</p>
+            <h2>Everything in one place.</h2>
+            <p className="portal-muted">
+              Book a time, send payment confirmation, and upload materials here. The owner will
+              review payment submissions separately.
             </p>
           </section>
           <section className="portal-card">
