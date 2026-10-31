@@ -60,6 +60,8 @@ function Portal() {
   const configured = Boolean(supabase);
   const hasApprovedPayment = payments.some((payment) => payment.status === "approved");
   const currentPrice = useMemo(() => hourPrice(), []);
+  const completedCount = bookings.filter((booking) => booking.status === "completed").length;
+  const bookedCount = bookings.filter((booking) => booking.status === "scheduled").length;
 
   useEffect(() => {
     if (!supabase) return;
@@ -246,30 +248,24 @@ function Portal() {
             <p className="portal-eyebrow">
               <CheckCircle2 size={15} /> Your progress
             </p>
-            <h2>
-              {bookings.filter((booking) => booking.status === "completed").length} classes
-              completed
-            </h2>
+            <h2>{completedCount} classes completed</h2>
             <div className="portal-progress-track" aria-label="Completed class progress">
               <span
                 style={{
-                  width: `${Math.min(
-                    100,
-                    bookings.filter((booking) => booking.status === "completed").length * 10,
-                  )}%`,
+                  width: `${Math.min(100, completedCount * 10)}%`,
                 }}
               />
             </div>
             <p className="portal-muted">
-              {bookings.filter((booking) => booking.status === "scheduled").length > 0
-                ? "You have a session on the calendar. We will update your progress after it is complete."
-                : "Completed sessions and upcoming bookings will appear here."}
+              {bookedCount > 0
+                ? `${bookedCount} session${bookedCount === 1 ? "" : "s"} booked. Your completion count updates after each session.`
+                : "Book a session to start your Lodestar progress history."}
             </p>
           </section>
           <section className="portal-card portal-progress-card">
             <p className="portal-eyebrow">Session history</p>
             <h2>
-              {bookings.length} total session{bookings.length === 1 ? "" : "s"}
+              {bookings.length} session{bookings.length === 1 ? "" : "s"} booked
             </h2>
             <div className="portal-session-list">
               {bookings.slice(0, 4).map((booking) => (
@@ -282,7 +278,11 @@ function Portal() {
                   <strong>{booking.status}</strong>
                 </div>
               ))}
-              {bookings.length === 0 && <p className="portal-muted">No sessions recorded yet.</p>}
+              {bookings.length === 0 && (
+                <p className="portal-muted">
+                  Your Cal.com bookings will appear here automatically.
+                </p>
+              )}
             </div>
           </section>
           <section className="portal-card portal-card-wide">
