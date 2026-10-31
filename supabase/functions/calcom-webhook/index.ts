@@ -5,6 +5,21 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
+async function notifyOwner(subject: string, text: string) {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key) return;
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: Deno.env.get("RESEND_FROM_EMAIL") ?? "Lodestar Portal <onboarding@resend.dev>",
+      to: [Deno.env.get("OWNER_NOTIFICATION_EMAIL") ?? "advising.lodestar@gmail.com"],
+      subject,
+      text,
+    }),
+  });
+}
+
 async function validSignature(request: Request, body: string) {
   const secret = Deno.env.get("CALCOM_WEBHOOK_SECRET");
   const signature = request.headers.get("x-cal-signature-256");
@@ -73,5 +88,9 @@ Deno.serve(async (request) => {
     { onConflict: "calcom_reference" },
   );
   if (error) return new Response(error.message, { status: 500 });
+  await notifyOwner(
+    `New Lodestar session booked by ${attendee}`,
+    `A new Cal.com session was booked.\nStudent: ${attendee}\nStart time: ${booking.startTime ?? "Not provided"}`,
+  );
   return new Response("Booking recorded", { status: 200 });
 });

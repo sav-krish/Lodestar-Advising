@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { CalendarDays, CheckCircle2, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { CalendarDays, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { calcomBookingUrl, supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/portal")({
@@ -60,8 +60,6 @@ function Portal() {
   const configured = Boolean(supabase);
   const hasApprovedPayment = payments.some((payment) => payment.status === "approved");
   const currentPrice = useMemo(() => hourPrice(), []);
-  const completedCount = bookings.filter((booking) => booking.status === "completed").length;
-  const bookedCount = bookings.filter((booking) => booking.status === "scheduled").length;
 
   useEffect(() => {
     if (!supabase) return;
@@ -169,12 +167,26 @@ function Portal() {
         return;
       }
     }
-    const { error } = await supabase.from("payment_submissions").insert({
-      student_id: session.user.id,
-      program,
-      amount_cents: program === "hour" ? currentPrice : 55000,
-      receipt_path: receiptPath,
-    });
+    const { data: payment, error } = await supabase
+      .from("payment_submissions")
+      .insert({
+        student_id: session.user.id,
+        program,
+        amount_cents: program === "hour" ? currentPrice : 55000,
+        receipt_path: receiptPath,
+      })
+      .select("id")
+      .single();
+    if (!error && payment) {
+      const notification = await supabase.functions.invoke("notify-payment", {
+        body: { payment_id: payment.id },
+      });
+      if (notification.error) {
+        setMessage("Payment submitted. The owner will review it shortly.");
+        setBusy(false);
+        return;
+      }
+    }
     setMessage(
       error?.message ?? "Payment submitted for review. Your portal will unlock after approval.",
     );
@@ -221,11 +233,11 @@ function Portal() {
           <p className="portal-eyebrow">
             {profile.role === "admin" ? "Owner portal" : "Student portal"}
           </p>
-          <h1>{profile.role === "admin" ? "Owner dashboard" : "Your Lodestar workspace"}</h1>
+          <h1>{profile.role === "admin" ? "Owner dashboard" : "Student portal"}</h1>
           <p className="portal-muted portal-heading-note">
             {profile.role === "admin"
               ? "Review payments, manage credits, and keep student sessions up to date."
-              : `Signed in as ${profile.full_name || profile.email}.`}
+              : "Payment approval unlocks your first booking."}
           </p>
         </div>
         <button
@@ -244,47 +256,6 @@ function Portal() {
         />
       ) : (
         <div className="portal-grid">
-          <section className="portal-card portal-progress-card">
-            <p className="portal-eyebrow">
-              <CheckCircle2 size={15} /> Your progress
-            </p>
-            <h2>{completedCount} classes completed</h2>
-            <div className="portal-progress-track" aria-label="Completed class progress">
-              <span
-                style={{
-                  width: `${Math.min(100, completedCount * 10)}%`,
-                }}
-              />
-            </div>
-            <p className="portal-muted">
-              {bookedCount > 0
-                ? `${bookedCount} session${bookedCount === 1 ? "" : "s"} booked. Your completion count updates after each session.`
-                : "Book a session to start your Lodestar progress history."}
-            </p>
-          </section>
-          <section className="portal-card portal-progress-card">
-            <p className="portal-eyebrow">Session history</p>
-            <h2>
-              {bookings.length} session{bookings.length === 1 ? "" : "s"} booked
-            </h2>
-            <div className="portal-session-list">
-              {bookings.slice(0, 4).map((booking) => (
-                <div className="portal-session-row" key={booking.id}>
-                  <span>
-                    {booking.starts_at
-                      ? new Date(booking.starts_at).toLocaleDateString()
-                      : "Date pending"}
-                  </span>
-                  <strong>{booking.status}</strong>
-                </div>
-              ))}
-              {bookings.length === 0 && (
-                <p className="portal-muted">
-                  Your Cal.com bookings will appear here automatically.
-                </p>
-              )}
-            </div>
-          </section>
           <section className="portal-card portal-card-wide">
             <p className="portal-eyebrow">Your next step</p>
             <h2>
@@ -325,14 +296,12 @@ function Portal() {
             )}
           </section>
           <section className="portal-card">
-            <p className="portal-eyebrow">Access</p>
-            <h2>
-              {creditCount} hour credit{creditCount === 1 ? "" : "s"}
-            </h2>
+            <p className="portal-eyebrow">Booking access</p>
+            <h2>{creditCount > 0 ? "You can book now." : "Payment review first."}</h2>
             <p className="portal-muted">
-              {hasApprovedPayment
-                ? "Approved payments unlock your scheduling link."
-                : "Your submission will appear here after review."}
+              {creditCount > 0
+                ? "Your approved payment has unlocked the scheduling calendar."
+                : "We will give you booking access after your payment is approved."}
             </p>
           </section>
           <section className="portal-card">
