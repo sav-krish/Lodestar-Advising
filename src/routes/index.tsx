@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { CSSProperties } from "react";
 import { ArrowDownRight, ArrowRight, Check, ExternalLink, Star } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
@@ -131,10 +132,15 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="home-page">
-      <section className="home-hero home-hero-blue" aria-labelledby="home-title">
-        <div className="home-hero-media" aria-hidden="true">
-          <img src={heroCampusGif} alt="" />
-        </div>
+      <section
+        className="home-hero home-hero-blue"
+        aria-labelledby="home-title"
+        style={
+          { "--hero-campus-image": `url(${heroCampusGif})` } as CSSProperties & {
+            "--hero-campus-image": string;
+          }
+        }
+      >
         <div className="home-container home-hero-inner">
           <div className="home-hero-copy">
             <h1 id="home-title">

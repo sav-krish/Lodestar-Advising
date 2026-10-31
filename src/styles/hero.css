@@ -7,7 +7,11 @@
   align-items: center;
   min-height: min(820px, calc(100svh - var(--site-header-height)));
   padding-block: clamp(100px, 12vw, 170px);
-  background: var(--gradient-hero);
+  background-image:
+    linear-gradient(90deg, #0b0b3ddd 0%, #171653b8 45%, #17165345 100%), var(--hero-campus-image);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat;
   color: white;
 }
 .home-hero-blue::before,
