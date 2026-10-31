@@ -6,6 +6,7 @@ import { CollegeMarquee } from "@/components/CollegeMarquee";
 import { AcceptanceLetter } from "@/components/AcceptanceLetter";
 import { clientsHelped, programs } from "@/data/programs";
 import { reviews, featuredReviews, totalReviewCount, averageRating } from "@/data/reviews";
+import heroCampusGif from "@/assets/hero-campus.gif";
 import "@/styles/home.css";
 import "@/styles/hero.css";
 
@@ -131,6 +132,9 @@ function Home() {
   return (
     <div className="home-page">
       <section className="home-hero home-hero-blue" aria-labelledby="home-title">
+        <div className="home-hero-media" aria-hidden="true">
+          <img src={heroCampusGif} alt="" />
+        </div>
         <div className="home-container home-hero-inner">
           <div className="home-hero-copy">
             <h1 id="home-title">
