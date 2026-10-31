@@ -80,22 +80,26 @@ function About() {
               <h2 className="mt-4 text-3xl italic">Our Story</h2>
               <p className="mt-4 text-muted-foreground leading-relaxed font-serif text-lg">
                 Lodestar Advising was founded in MMXXVI by{" "}
-                <span className="text-foreground font-semibold">Krish Sav</span>, a student who walked
-                the elite admissions road firsthand and built a methodology that now produces 12+
-                elite acceptances and $600K+ in scholarships for the students and families Lodestar serves.
+                <span className="text-foreground font-semibold">Krish Sav</span>, a student who
+                walked the elite admissions road firsthand and built a methodology that now produces
+                12+ elite acceptances and $600K+ in scholarships for the students and families
+                Lodestar serves.
               </p>
               <p className="mt-4 text-muted-foreground leading-relaxed font-serif text-lg">
                 Krish navigated the entire admissions process without a private counselor. Every
-                essay, every shortlist, and every scholarship strategy was self-built. The result was a
-                playbook that earned multiple acceptances to highly selective universities and{" "}
-                <span className="text-foreground font-semibold">over $432,000 in scholarship dollars</span>
-                {" "}across his own offers. He distilled that system into a repeatable counseling framework
-                now applied to every Lodestar student.
+                essay, every shortlist, and every scholarship strategy was self-built. The result
+                was a playbook that earned multiple acceptances to highly selective universities and{" "}
+                <span className="text-foreground font-semibold">
+                  over $432,000 in scholarship dollars
+                </span>{" "}
+                across his own offers. He distilled that system into a repeatable counseling
+                framework now applied to every Lodestar student.
               </p>
               <p className="mt-4 text-muted-foreground leading-relaxed font-serif text-lg">
                 Lodestar exists because he wished he'd had a guide. Now Lodestar is that guide for
-                students and parents who deserve to understand the process just as clearly. The mission is
-                simple: streamline the road, share the playbook, and make sure no family walks it alone.
+                students and parents who deserve to understand the process just as clearly. The
+                mission is simple: streamline the road, share the playbook, and make sure no family
+                walks it alone.
               </p>
             </Reveal>
           </ScrollScrub>
@@ -114,7 +118,8 @@ function About() {
                   <strong className="text-foreground not-italic font-serif font-semibold text-lg">
                     Rigorous.
                   </strong>{" "}
-                  We measure progress in earned admissions, scholarship dollars, and unlocked potential.
+                  We measure progress in earned admissions, scholarship dollars, and unlocked
+                  potential.
                 </li>
                 <li>
                   <strong className="text-foreground not-italic font-serif font-semibold text-lg">
@@ -128,14 +133,14 @@ function About() {
         </div>
       </SectionFadeIn>
 
-
-
       <SectionPrimaryBand>
         <Reveal className="text-center max-w-2xl mx-auto">
           <span className="text-[0.7rem] uppercase tracking-[0.4em] text-gold font-display">
             Core Values
           </span>
-          <h2 className="mt-4 font-serif text-4xl md:text-5xl italic">What every family receives.</h2>
+          <h2 className="mt-4 font-serif text-4xl md:text-5xl italic">
+            What every family receives.
+          </h2>
           <div className="gold-divider mx-auto mt-6" />
         </Reveal>
         <ScrollScrub className="mt-14" strength={22}>

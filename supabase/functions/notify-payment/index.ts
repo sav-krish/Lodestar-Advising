@@ -32,7 +32,20 @@ Deno.serve(async (request) => {
   } = await authClient.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401, headers: corsHeaders() });
 
-  const { payment_id: paymentId } = await request.json();
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return new Response("Invalid JSON body", { status: 400, headers: corsHeaders() });
+  }
+  const paymentId =
+    payload && typeof payload === "object" && "payment_id" in payload ? payload.payment_id : null;
+  if (
+    typeof paymentId !== "string" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(paymentId)
+  ) {
+    return new Response("A valid payment_id is required", { status: 400, headers: corsHeaders() });
+  }
   const { data: payment, error: paymentError } = await supabase
     .from("payment_submissions")
     .select("id, student_id, program, amount_cents, created_at")
@@ -49,32 +62,41 @@ Deno.serve(async (request) => {
     .eq("id", user.id)
     .single();
   const resendKey = Deno.env.get("RESEND_API_KEY");
-  const ownerEmail = Deno.env.get("OWNER_NOTIFICATION_EMAIL") ?? "advising.lodestar@gmail.com";
-  if (!resendKey) {
+  const from = Deno.env.get("RESEND_FROM_EMAIL");
+  const ownerEmail = Deno.env.get("OWNER_NOTIFICATION_EMAIL") ?? "sav.krish01@gmail.com";
+  if (!resendKey || !from) {
     return new Response("Notification service is not configured", {
       status: 503,
       headers: corsHeaders(),
     });
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: Deno.env.get("RESEND_FROM_EMAIL") ?? "Lodestar Portal <onboarding@resend.dev>",
-      to: [ownerEmail],
-      subject: `New Lodestar payment from ${profile?.full_name ?? profile?.email ?? "student"}`,
-      text: [
-        "A new payment confirmation is ready for review.",
-        `Student: ${profile?.full_name ?? "Not provided"}`,
-        `Email: ${profile?.email ?? user.email ?? "Not provided"}`,
-        `Program: ${payment.program}`,
-        `Amount: $${(payment.amount_cents / 100).toFixed(2)}`,
-        `Submitted: ${new Date(payment.created_at).toLocaleString()}`,
-      ].join("\n"),
-    }),
-  });
-  if (!response.ok) {
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `payment-submission/${payment.id}`,
+      },
+      body: JSON.stringify({
+        from,
+        to: [ownerEmail],
+        subject: `New Lodestar payment from ${profile?.full_name ?? profile?.email ?? "student"}`,
+        text: [
+          "A new payment confirmation is ready for review.",
+          `Student: ${profile?.full_name ?? "Not provided"}`,
+          `Email: ${profile?.email ?? user.email ?? "Not provided"}`,
+          `Program: ${payment.program}`,
+          `Amount: $${(payment.amount_cents / 100).toFixed(2)}`,
+          `Submitted: ${new Date(payment.created_at).toLocaleString()}`,
+        ].join("\n"),
+      }),
+    });
+    if (!response.ok) {
+      return new Response("Notification delivery failed", { status: 502, headers: corsHeaders() });
+    }
+  } catch {
     return new Response("Notification delivery failed", { status: 502, headers: corsHeaders() });
   }
   return new Response("Notification sent", { status: 200, headers: corsHeaders() });

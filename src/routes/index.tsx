@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "How does the Essay Package work?",
-    a: "The Lodestar Essay Package includes ten 30-minute classes with Krish, focused only on essays. Work on brainstorming, structure, writing, and revision for your Common App and supplemental essays. The package has a discounted equivalent hourly rate compared with The Lodestar Hour; contact us for current pricing.",
+    a: "The Lodestar Essay Package includes ten 30-minute classes with Krish, focused only on essays. Work on brainstorming, structure, writing, and revision for your Common App and supplemental essays. The ten-class package costs $550.",
   },
   {
     q: "Who will I work with?",
@@ -116,7 +116,7 @@ export const Route = createFileRoute("/")({
               itemOffered: {
                 "@type": "Service",
                 name: p.name,
-                description: `${p.summary} ${p.points.join(". ")}.${p.discountedHourlyRate ? " Discounted equivalent hourly rate compared with The Lodestar Hour." : ""}`,
+                description: `${p.summary} ${p.points.join(". ")}. ${p.priceSummary}`,
               },
             })),
           },
@@ -206,11 +206,7 @@ function Home() {
                       </li>
                     ))}
                   </ul>
-                  <p className="home-program-note">
-                    {program.discountedHourlyRate
-                      ? "A discounted equivalent hourly rate. Contact us for package pricing."
-                      : "Bring your priorities. Contact us for current session pricing."}
-                  </p>
+                  <p className="home-program-note">{program.priceSummary}</p>
                   <Link to="/services" className="home-text-link">
                     Explore {program.id === "hour" ? "the Hour" : "the Essay Package"}
                     <ArrowRight size={17} aria-hidden="true" />

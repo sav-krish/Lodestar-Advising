@@ -59,5 +59,4 @@ export const featuredReviews = [...reviews]
   .map(({ r }) => r);
 
 export const totalReviewCount = reviews.length;
-export const averageRating =
-  reviews.reduce((sum, r) => sum + r.rating, 0) / (reviews.length || 1);
+export const averageRating = reviews.reduce((sum, r) => sum + r.rating, 0) / (reviews.length || 1);

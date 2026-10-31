@@ -17,8 +17,9 @@ describe("current Lodestar offers", () => {
   test("the package is exclusively for essays", () => {
     expect(programs[1].scope).toBe("essays-only");
   });
-  test("the package has a discounted equivalent hourly rate", () => {
-    expect(programs[1].discountedHourlyRate).toBe(true);
+  test("the essay package costs $550 without an hourly-discount claim", () => {
+    expect(programs[1].priceCents).toBe(55000);
+    expect(programs[1].discountedHourlyRate).toBe(false);
   });
   test("at least twenty clients have been helped", () => {
     expect(clientsHelped).toBe(20);

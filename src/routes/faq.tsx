@@ -6,7 +6,7 @@ import { PageHero, SectionFadeIn } from "@/components/PageSections";
 const faqs = [
   {
     q: "What is Lodestar Advising?",
-    a: "Lodestar Advising is a premium, founder-led college admissions consultancy guiding ambitious students into the world's most selective universities. Our track record includes 12+ elite student acceptances and $600K+ in scholarships won for students. We have helped 20+ clients. Choose The Lodestar Hour for flexible admissions support or The Lodestar Essay Package for 10 premium, 30-minute essay-only classes at a discounted equivalent hourly rate.",
+    a: "Lodestar Advising is a premium, founder-led college admissions consultancy guiding ambitious students into the world's most selective universities. Our track record includes 12+ elite student acceptances and $600K+ in scholarships won for students. We have helped 20+ clients. Choose The Lodestar Hour for flexible admissions support or The Lodestar Essay Package for 10 premium, 30-minute essay-only classes for $550.",
   },
   {
     q: "Who founded Lodestar Advising?",

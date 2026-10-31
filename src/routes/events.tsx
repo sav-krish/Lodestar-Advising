@@ -41,8 +41,7 @@ export const Route = createFileRoute("/events")({
       { property: "og:title", content: "Lodestar Advising: Premium Ivy League Prep | Events" },
       {
         property: "og:description",
-        content:
-          "Free webinars, workshops, and admissions info sessions from Lodestar Advising.",
+        content: "Free webinars, workshops, and admissions info sessions from Lodestar Advising.",
       },
       { property: "og:url", content: "https://lodestaradvising.com/events" },
     ],
@@ -102,8 +101,8 @@ function EventsPage() {
           className="mt-6 max-w-2xl text-lg text-primary-foreground font-serif animate-fade-up"
           style={{ animationDelay: "0.35s" }}
         >
-          Join Lodestar Advising for free founder-led sessions on Ivy
-          League strategy, essay craft, and scholarship planning.
+          Join Lodestar Advising for free founder-led sessions on Ivy League strategy, essay craft,
+          and scholarship planning.
         </p>
       </PageHero>
 
@@ -113,9 +112,7 @@ function EventsPage() {
             <Reveal effect="scale" className="text-center">
               <CalendarDays className="mx-auto text-gold" size={28} />
               <div className="gold-divider mx-auto mt-6" />
-              <h2 className="mt-8 font-serif italic text-4xl text-primary">
-                Upcoming Events
-              </h2>
+              <h2 className="mt-8 font-serif italic text-4xl text-primary">Upcoming Events</h2>
             </Reveal>
 
             {upcomingEvents.length === 0 && (
@@ -126,8 +123,8 @@ function EventsPage() {
                     No events are scheduled right now.
                   </p>
                   <p className="mt-3 font-serif text-muted-foreground">
-                    New workshops and info sessions are announced here. Check back soon,
-                    or book a one-on-one strategy call in the meantime.
+                    New workshops and info sessions are announced here. Check back soon, or book a
+                    one-on-one strategy call in the meantime.
                   </p>
                 </div>
               </Reveal>
@@ -162,7 +159,10 @@ function EventsPage() {
                           className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-md bg-gradient-gold text-primary font-semibold shadow-elegant hover:-translate-y-0.5 transition-smooth font-display tracking-wider text-sm"
                         >
                           {e.cta.label}
-                          <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                          <ArrowRight
+                            size={18}
+                            className="transition-transform group-hover:translate-x-1"
+                          />
                         </a>
                       </div>
                     )}

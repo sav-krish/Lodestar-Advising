@@ -29,7 +29,12 @@ export function SectionFadeIn({ children, className }: SectionProps) {
 /** Navy band with soft fade into the next section */
 export function SectionPrimaryBand({ children, className }: SectionProps) {
   return (
-    <section className={cn("section-primary-band bg-primary text-primary-foreground py-20 md:py-24", className)}>
+    <section
+      className={cn(
+        "section-primary-band bg-primary text-primary-foreground py-20 md:py-24",
+        className,
+      )}
+    >
       <div className="container-prose relative z-10">{children}</div>
     </section>
   );

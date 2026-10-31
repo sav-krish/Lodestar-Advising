@@ -110,7 +110,6 @@ function Contact() {
 
       <SectionFadeIn>
         <ScrollScrub strength={20}>
-
           <div className="container-prose grid md:grid-cols-5 gap-12">
             <Reveal as="div" className="md:col-span-2 space-y-8" effect="left">
               <div>
@@ -160,7 +159,9 @@ function Contact() {
                   />
                   <div>
                     <div className="font-medium">Reply within one business day</div>
-                    <div className="text-sm text-muted-foreground">Personal response from the founder</div>
+                    <div className="text-sm text-muted-foreground">
+                      Personal response from the founder
+                    </div>
                   </div>
                 </li>
               </ul>

@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { CalendarDays, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { calcomBookingUrl, supabase } from "@/lib/supabase";
 
@@ -18,6 +26,7 @@ export const Route = createFileRoute("/portal")({
 });
 
 type Profile = { id: string; email: string; full_name: string | null; role: "student" | "admin" };
+type PortalSession = { user: { id: string; email?: string } };
 type Payment = {
   id: string;
   student_id: string;
@@ -46,7 +55,7 @@ const cutoff = new Date("2026-11-16T00:00:00-06:00");
 const hourPrice = () => (new Date() >= cutoff ? 6000 : 5000);
 
 function Portal() {
-  const [session, setSession] = useState<{ user: { id: string; email?: string } } | null>(null);
+  const [session, setSession] = useState<PortalSession | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -56,63 +65,112 @@ function Portal() {
   const [authMode, setAuthMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
+  const currentUserRef = useRef<string | null>(null);
+  const userId = session?.user.id ?? null;
 
   const configured = Boolean(supabase);
   const hasApprovedPayment = payments.some((payment) => payment.status === "approved");
   const currentPrice = useMemo(() => hourPrice(), []);
+  const showMessage = useCallback(
+    (next: string) => {
+      if (currentUserRef.current === userId) setMessage(next);
+    },
+    [userId],
+  );
 
   useEffect(() => {
     if (!supabase) return;
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setSession({ user: data.session.user });
-    });
+    let cancelled = false;
+    let authRevision = 0;
+    const updateSession = (next: PortalSession | null) => {
+      if (cancelled) return;
+      const nextUserId = next?.user.id ?? null;
+      if (currentUserRef.current !== nextUserId) {
+        currentUserRef.current = nextUserId;
+        setProfile(null);
+        setPayments([]);
+        setBookings([]);
+        setMaterials([]);
+        setCreditCount(0);
+        setMessage("");
+        setBusy(false);
+        setLoading(Boolean(nextUserId));
+      }
+      setSession(next);
+    };
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession ? { user: nextSession.user } : null);
+      authRevision += 1;
+      updateSession(nextSession ? { user: nextSession.user } : null);
     });
-    return () => data.subscription.unsubscribe();
+    const initialRevision = authRevision;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (authRevision === initialRevision) {
+        updateSession(data.session ? { user: data.session.user } : null);
+      }
+    });
+    return () => {
+      cancelled = true;
+      data.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
     const client = supabase;
-    if (!client || !session) return;
+    if (!client || !userId) return;
+    let cancelled = false;
+    const isCurrent = () => !cancelled && currentUserRef.current === userId;
     const load = async () => {
       setLoading(true);
-      const [profileResult, paymentResult, creditResult, bookingResult, materialResult] =
-        await Promise.all([
-          client.from("profiles").select("*").eq("id", session.user.id).maybeSingle(),
-          client.from("payment_submissions").select("*").order("created_at", { ascending: false }),
-          client
-            .from("booking_credits")
-            .select("credits_total, credits_used")
-            .eq("student_id", session.user.id),
-          client.from("bookings").select("*").order("created_at", { ascending: false }),
-          client.from("student_materials").select("*").order("created_at", { ascending: false }),
-        ]);
-      if (profileResult.error) {
-        setMessage(profileResult.error.message);
-      } else if (!profileResult.data) {
-        setMessage(
-          "Your account is authenticated, but its Lodestar profile is missing. Run the portal profile repair SQL in Supabase, then sign in again.",
+      try {
+        const [profileResult, paymentResult, creditResult, bookingResult, materialResult] =
+          await Promise.all([
+            client.from("profiles").select("*").eq("id", userId).maybeSingle(),
+            client
+              .from("payment_submissions")
+              .select("*")
+              .order("created_at", { ascending: false }),
+            client
+              .from("booking_credits")
+              .select("credits_total, credits_used")
+              .eq("student_id", userId),
+            client.from("bookings").select("*").order("created_at", { ascending: false }),
+            client.from("student_materials").select("*").order("created_at", { ascending: false }),
+          ]);
+        if (!isCurrent()) return;
+        if (profileResult.error) {
+          setMessage(profileResult.error.message);
+        } else if (!profileResult.data) {
+          setMessage(
+            "Your student profile is not ready. Please reload this page or contact Lodestar for help.",
+          );
+        }
+        setProfile(profileResult.data);
+        setPayments(paymentResult.data ?? []);
+        setCreditCount(
+          (creditResult.data ?? []).reduce(
+            (total, item) => total + item.credits_total - item.credits_used,
+            0,
+          ),
         );
+        setBookings(bookingResult.data ?? []);
+        setMaterials(materialResult.data ?? []);
+        const firstDataError = [paymentResult.error, creditResult.error, bookingResult.error].find(
+          (error) => error,
+        );
+        if (firstDataError && !profileResult.error) setMessage(firstDataError.message);
+      } catch (error) {
+        if (isCurrent()) {
+          setMessage(error instanceof Error ? error.message : "Your portal could not load.");
+        }
+      } finally {
+        if (isCurrent()) setLoading(false);
       }
-      setProfile(profileResult.data);
-      setPayments(paymentResult.data ?? []);
-      setCreditCount(
-        (creditResult.data ?? []).reduce(
-          (total, item) => total + item.credits_total - item.credits_used,
-          0,
-        ),
-      );
-      setBookings(bookingResult.data ?? []);
-      setMaterials(materialResult.data ?? []);
-      const firstDataError = [paymentResult.error, creditResult.error, bookingResult.error].find(
-        (error) => error,
-      );
-      if (firstDataError && !profileResult.error) setMessage(firstDataError.message);
-      setLoading(false);
     };
     void load();
-  }, [session]);
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
 
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -151,6 +209,8 @@ function Portal() {
   const submitPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!supabase || !session) return;
+    const actor = session.user.id;
+    const isCurrent = () => currentUserRef.current === actor;
     setBusy(true);
     const form = new FormData(event.currentTarget);
     const program = String(form.get("program"));
@@ -161,6 +221,7 @@ function Portal() {
       const upload = await supabase.storage
         .from("student-materials")
         .upload(receiptPath, file, { upsert: false });
+      if (!isCurrent()) return;
       if (upload.error) {
         setMessage(upload.error.message);
         setBusy(false);
@@ -177,10 +238,12 @@ function Portal() {
       })
       .select("id")
       .single();
+    if (!isCurrent()) return;
     if (!error && payment) {
       const notification = await supabase.functions.invoke("notify-payment", {
         body: { payment_id: payment.id },
       });
+      if (!isCurrent()) return;
       if (notification.error) {
         setMessage("Payment submitted. The owner will review it shortly.");
         setBusy(false);
@@ -212,7 +275,7 @@ function Portal() {
         />
       </PortalShell>
     );
-  if (!profile)
+  if (!profile || profile.id !== userId)
     return (
       <PortalShell>
         <Notice
@@ -252,7 +315,7 @@ function Portal() {
           payments={payments}
           bookings={bookings}
           materials={materials}
-          onMessage={setMessage}
+          onMessage={showMessage}
         />
       ) : (
         <div className="portal-grid">
@@ -300,7 +363,7 @@ function Portal() {
           <section className="portal-card">
             <p className="portal-eyebrow">Materials</p>
             <h2>Upload a file</h2>
-            <MaterialUpload userId={session.user.id} onMessage={setMessage} />
+            <MaterialUpload userId={session.user.id} onMessage={showMessage} />
           </section>
           {message && <Notice text={message} />}
         </div>
@@ -636,7 +699,12 @@ function AuthCard({
         </label>
         <label>
           Password
-          <input name="password" type="password" minLength={8} required />
+          <input
+            name="password"
+            type="password"
+            minLength={mode === "sign-up" ? 12 : undefined}
+            required
+          />
         </label>
         <button className="portal-button" disabled={busy}>
           {mode === "sign-in" ? "Sign in" : "Create account"}

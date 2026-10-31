@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
 import { BookMarked, ArrowRight } from "lucide-react";
-import { PageHero, SectionFadeIn, SectionPrimaryBand, SectionBlendPanel } from "@/components/PageSections";
+import {
+  PageHero,
+  SectionFadeIn,
+  SectionPrimaryBand,
+  SectionBlendPanel,
+} from "@/components/PageSections";
 import { ScrollScrub } from "@/components/ScrollEffects";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 
@@ -61,8 +66,8 @@ function Results() {
           className="mt-6 max-w-2xl text-lg text-primary-foreground font-serif animate-fade-up"
           style={{ animationDelay: "0.35s" }}
         >
-          12+ elite college acceptances and $600K+ in scholarships won for the students we guide. Every
-          framework we teach is drawn from real, proven student outcomes.
+          12+ elite college acceptances and $600K+ in scholarships won for the students we guide.
+          Every framework we teach is drawn from real, proven student outcomes.
         </p>
       </PageHero>
 
@@ -74,7 +79,11 @@ function Results() {
               { k: "20+", v: "Clients helped" },
               { k: "4", v: "Featured in news articles" },
             ].map((s, i) => (
-              <Reveal key={s.v} delay={((i % 4) + 1) as 1 | 2 | 3 | 4} effect={i % 2 === 0 ? "left" : "right"}>
+              <Reveal
+                key={s.v}
+                delay={((i % 4) + 1) as 1 | 2 | 3 | 4}
+                effect={i % 2 === 0 ? "left" : "right"}
+              >
                 <div className="flex items-center justify-between gap-6 p-8 min-h-[7rem] rounded-xl bg-card border border-border shadow-soft hover-lift hover:shadow-elegant hover:border-gold/40">
                   <div className="font-serif italic text-4xl md:text-5xl text-gold leading-none shrink-0">
                     {s.k}
@@ -100,7 +109,11 @@ function Results() {
         </Reveal>
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {colleges.map((c, i) => (
-            <Reveal key={c} delay={((i % 4) + 1) as 1 | 2 | 3 | 4} effect={i % 2 === 0 ? "left" : "right"}>
+            <Reveal
+              key={c}
+              delay={((i % 4) + 1) as 1 | 2 | 3 | 4}
+              effect={i % 2 === 0 ? "left" : "right"}
+            >
               <div className="p-6 rounded-lg bg-primary-foreground/[0.04] border border-primary-foreground/10 text-center font-serif italic text-lg hover-lift hover:border-gold/50">
                 {c}
               </div>
@@ -114,14 +127,13 @@ function Results() {
         </Reveal>
       </SectionPrimaryBand>
 
-
-
-
       <WhyChooseUs />
 
       <SectionBlendPanel>
         <Reveal effect="scale" className="promise-panel max-w-3xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl italic">Strategy proven by student results.</h2>
+          <h2 className="font-serif text-3xl md:text-4xl italic">
+            Strategy proven by student results.
+          </h2>
           <div className="gold-divider mx-auto mt-6" />
           <p className="mt-6 font-serif text-lg text-muted-foreground leading-relaxed">
             From course rigor to scholarship positioning to the final supplemental essay, Lodestar's

@@ -1,1 +1,9 @@
-project_id = "lfkwxirouafyaluflanq"
+project_id = "trdhotcpdgopaqelgyrq"
+
+# Cal authenticates with its raw-body HMAC. Payment notifications verify the
+# caller with Supabase Auth inside the function, including modern signing keys.
+[functions.calcom-webhook]
+verify_jwt = false
+
+[functions.notify-payment]
+verify_jwt = false

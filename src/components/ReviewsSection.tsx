@@ -1,10 +1,6 @@
 import { Star, ExternalLink } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-import {
-  reviews,
-  featuredReviews,
-  averageRating,
-} from "@/data/reviews";
+import { reviews, featuredReviews, averageRating } from "@/data/reviews";
 
 // Re-export so existing imports (e.g. JSON-LD in routes/index.tsx) keep working.
 export { reviews };
@@ -31,12 +27,8 @@ export function ReviewsSection() {
                 <Star key={i} size={20} className="fill-gold text-gold" />
               ))}
             </div>
-            <span className="font-serif text-lg text-primary font-semibold">
-              {avgDisplay}
-            </span>
-            <span className="text-primary font-serif">
-              · Trusted by families
-            </span>
+            <span className="font-serif text-lg text-primary font-semibold">{avgDisplay}</span>
+            <span className="text-primary font-serif">· Trusted by families</span>
           </div>
         </Reveal>
 
