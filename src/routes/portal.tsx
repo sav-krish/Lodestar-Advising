@@ -10,7 +10,7 @@ import {
 } from "react";
 import { CalendarDays, FileUp, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { calcomBookingUrl, supabase } from "@/lib/supabase";
-import { getHourPriceCents } from "@/data/programs";
+import { getHourPriceCents, programs } from "@/data/programs";
 
 export const Route = createFileRoute("/portal")({
   head: () => ({
@@ -230,7 +230,10 @@ function Portal() {
       .insert({
         student_id: session.user.id,
         program,
-        amount_cents: program === "hour" ? currentPrice : 55000,
+        amount_cents:
+          program === "hour"
+            ? currentPrice
+            : (programs.find((offer) => offer.id === "essay-package")?.priceCents ?? 25000),
         receipt_path: receiptPath,
       })
       .select("id")
@@ -399,7 +402,10 @@ function PaymentForm({
         Program
         <select name="program" defaultValue="hour">
           <option value="hour">Lodestar Hour · ${(price / 100).toFixed(0)}</option>
-          <option value="essay_package">Essay Package · $550</option>
+          <option value="essay_package">
+            Essay Package · $
+            {(programs.find((offer) => offer.id === "essay-package")?.priceCents ?? 25000) / 100}
+          </option>
         </select>
       </label>
       {!hasPriorPayment && (

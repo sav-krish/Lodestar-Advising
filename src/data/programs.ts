@@ -11,7 +11,7 @@ export const programs = [
     sessionMinutes: 60,
     scope: "admissions",
     priceCents: 5000,
-    priceSummary: "$50 per hour through November 15, 2026. $60 from Monday, November 16.",
+    priceSummary: "$50 per hour through November 9, 2026. $60 from November 10.",
     discountedHourlyRate: false,
     summary: "One hour for whatever needs your attention.",
     points: [
@@ -27,8 +27,8 @@ export const programs = [
     sessionCount: 10,
     sessionMinutes: 30,
     scope: "essays-only",
-    priceCents: 55000,
-    priceSummary: "$550 for all ten essay classes.",
+    priceCents: 25000,
+    priceSummary: "$250 for all ten essay classes.",
     discountedHourlyRate: false,
     summary: "Ten focused classes. Your essays, from first idea to final draft.",
     points: [
